@@ -1,0 +1,49 @@
+module ClientJavaFX {
+    requires Utils;
+
+    requires javafx.graphics;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires MaterialFX;
+
+    requires retrofit2;
+    requires retrofit2.converter.gson;
+    requires retrofit2.adapter.rxjava3;
+    requires io.reactivex.rxjava3;
+
+    requires lombok;
+    requires io.vavr;
+    requires org.apache.logging.log4j;
+
+    requires java.sql;
+    requires gson;
+    requires okhttp3;
+    requires jakarta.cdi;
+    requires jakarta.inject;
+    requires jakarta.el;
+
+    exports org.jorgetargz.client.dao;
+    exports org.jorgetargz.client.dao.di;
+    exports org.jorgetargz.client.dao.impl;
+    exports org.jorgetargz.client.dao.vault_api;
+    exports org.jorgetargz.client.dao.vault_api.utils;
+    exports org.jorgetargz.client.dao.common;
+    exports org.jorgetargz.client.dao.vault_api.di;
+    exports org.jorgetargz.client.dao.vault_api.config;
+    exports org.jorgetargz.client.domain.services;
+    exports org.jorgetargz.client.domain.services.impl;
+
+    exports org.jorgetargz.client.gui.main.common;
+    exports org.jorgetargz.client.gui.screens.welcome;
+
+    opens config;
+    opens org.jorgetargz.client.dao.common;
+
+    opens org.jorgetargz.client.gui.main;
+    opens org.jorgetargz.client.gui.main.common;
+    opens org.jorgetargz.client.gui.screens.common;
+    opens org.jorgetargz.client.gui.screens.main;
+    opens org.jorgetargz.client.gui.screens.login;
+    opens org.jorgetargz.client.gui.screens.welcome;
+
+}

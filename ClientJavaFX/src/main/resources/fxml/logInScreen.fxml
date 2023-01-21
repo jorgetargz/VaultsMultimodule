@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="700.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.jorgetargz.client.gui.screens.login.LoginController">
+    <Label id="tituloLogin" layoutX="531.0" layoutY="103.0" text="%Title" textFill="#d978c6"/>
+    <ImageView fx:id="logo" fitHeight="222.0" fitWidth="290.0" layoutX="155.0" layoutY="49.0" pickOnBounds="true"
+               preserveRatio="true">
+    </ImageView>
+    <MFXTextField fx:id="txtUsername" floatMode="BORDER" layoutX="130.0" layoutY="279.0" prefHeight="2.0"
+                  prefWidth="290.0" promptText="%Username"/>
+    <MFXPasswordField fx:id="txtPass" layoutX="130.0" layoutY="346.0" prefHeight="53.0" prefWidth="290.0"
+                      promptText="%PasswordRequired"/>
+    <MFXButton layoutX="192.0" layoutY="430.0" mnemonicParsing="false" onAction="#doLogin" prefHeight="34.0"
+               prefWidth="166.0" text="%Login"/>
+    <MFXButton layoutX="639.0" layoutY="551.0" onAction="#doRegister" prefHeight="34.0" prefWidth="166.0"
+               text="%Register"/>
+    <MFXPasswordField fx:id="passwordTxt" layoutX="577.0" layoutY="471.0" prefHeight="53.0" prefWidth="290.0"
+                      promptText="%PasswordRequired"/>
+    <MFXTextField fx:id="usernameTxt" layoutX="577.0" layoutY="398.0" prefHeight="53.0" prefWidth="290.0"
+                  promptText="%Username"/>
+
+</AnchorPane>
