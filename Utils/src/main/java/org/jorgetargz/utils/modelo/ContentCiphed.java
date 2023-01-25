@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContentCiphed {
-    private byte[] iv;
-    private byte[] salt;
-    private byte[] cipherText;
+    private String iv;
+    private String salt;
+    private String cipherText;
 }

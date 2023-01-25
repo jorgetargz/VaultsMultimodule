@@ -2,6 +2,9 @@ package org.jorgetargz.client.dao.vault_api.di;
 
 import com.google.gson.Gson;
 import org.jorgetargz.client.dao.vault_api.LoginAPI;
+import org.jorgetargz.client.dao.vault_api.MessagesAPI;
+import org.jorgetargz.client.dao.vault_api.UsersAPI;
+import org.jorgetargz.client.dao.vault_api.VaultAPI;
 import org.jorgetargz.client.dao.vault_api.utils.AuthorizationInterceptor;
 import org.jorgetargz.client.dao.vault_api.config.ConfigVaultAPI;
 import org.jorgetargz.client.dao.vault_api.utils.CacheAuthorization;
@@ -40,6 +43,24 @@ public class ProducerVaultAPI {
     @Singleton
     public LoginAPI getLoginAPI(Retrofit retrofit) {
         return retrofit.create(LoginAPI.class);
+    }
+
+    @Produces
+    @Singleton
+    public UsersAPI getUsersAPI(Retrofit retrofit) {
+        return retrofit.create(UsersAPI.class);
+    }
+
+    @Produces
+    @Singleton
+    public VaultAPI getVaultAPI(Retrofit retrofit) {
+        return retrofit.create(VaultAPI.class);
+    }
+
+    @Produces
+    @Singleton
+    public MessagesAPI getMessagesAPI(Retrofit retrofit) {
+        return retrofit.create(MessagesAPI.class);
     }
 
 }

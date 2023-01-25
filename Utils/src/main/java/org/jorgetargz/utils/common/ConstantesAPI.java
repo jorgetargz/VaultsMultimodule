@@ -14,9 +14,14 @@ public class ConstantesAPI {
     public static final String LOGOUT_PATH = "logout/";
     public static final String VAULT_CHANGE_PASSWORD_PATH = "changePassword/";
     public static final String VAULT_PATH = "vault/";
-    public static final String MESSAGE_CREATE_PATH = "createMessage/";
-    public static final String MESSAGE_UPDATE_PATH = "updateMessage/";
-    public static final String MESSAGE_DELETE_PATH = "deleteMessage/";
+
+    //Path Parameters
+    public static final String VAULT_ID_PATH_PARAM = "{vaultId}";
+    public static final String VAULT_ID_PARAM = "vaultId";
+    public static final String MESSAGE_ID_PATH_PARAM = "{messageId}";
+    public static final String MESSAGE_ID_PARAM = "messageId";
+    public static final String USERNAME_PATH_PARAM = "{username}";
+    public static final String USERNAME_PARAM = "username";
 
     //ENDPOINTS LOGIN
     public static final String ENDPOINT_LOGIN = PATH_LOGIN;
@@ -25,16 +30,15 @@ public class ConstantesAPI {
     //ENDPOINTS VAULT
     public static final String ENDPOINT_VAULT = PATH_VAULTS;
     public static final String ENDPOINT_VAULT_CHANGE_PASSWORD = PATH_VAULTS + VAULT_CHANGE_PASSWORD_PATH;
-    public static final String ENDPOINT_VAULT_MESSAGES = PATH_VAULTS + VAULT_PATH;
-    public static final String ENDPOINT_MESSAGE_CREATE = PATH_VAULTS + MESSAGE_CREATE_PATH;
-    public static final String ENDPOINT_MESSAGE_UPDATE = PATH_VAULTS + MESSAGE_UPDATE_PATH;
-    public static final String ENDPOINT_MESSAGE_DELETE = PATH_VAULTS + MESSAGE_DELETE_PATH;
+    public static final String ENDPOINT_VAULT_DELETE = PATH_VAULTS + VAULT_ID_PATH_PARAM;
 
-    //Path Parameters
-    public static final String VAULT_ID_PATH_PARAM = "{vaultId}";
-    public static final String VAULT_ID_PARAM = "vaultId";
-    public static final String MESSAGE_ID_PATH_PARAM = "{messageId}";
-    public static final String MESSAGE_ID_PARAM = "messageId";
+    //ENDPOINTS MESSAGES
+    public static final String ENDPOINT_GET_MESSAGES = PATH_MESSAGES + VAULT_PATH + VAULT_ID_PATH_PARAM;
+    public static final String ENDPOINT_MESSAGE = PATH_MESSAGES;
+    public static final String ENDPOINT_MESSAGE_DELETE = PATH_MESSAGES + MESSAGE_ID_PATH_PARAM;
+
+    //ENDPOINTS USERS
+    public static final String ENDPOINT_USERS = PATH_USERS;
 
     //Roles
     public static final String ROLE_ADMIN = "ADMIN";
