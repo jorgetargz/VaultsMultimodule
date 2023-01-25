@@ -30,27 +30,23 @@ public class MessagesDaoImpl implements MessagesDao {
     public Vault getVault(int messageId) {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT_BY_MESSAGE_ID)) {
-            return getVault(messageId, preparedStatement);
+            preparedStatement.setInt(1, messageId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Vault.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("name"))
+                        .usernameOwner(resultSet.getString("username"))
+                        .password(resultSet.getString("password"))
+                        .readByAll(resultSet.getInt("read") == 1)
+                        .writeByAll(resultSet.getInt("write") == 1)
+                        .build();
+            } else {
+                throw new NotFoundException("Vault not found");
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
             throw new DatabaseException(Constantes.DATABASE_ERROR);
-        }
-    }
-
-    private Vault getVault(int messageId, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1, messageId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            return Vault.builder()
-                    .id(resultSet.getInt("id"))
-                    .name(resultSet.getString("name"))
-                    .usernameOwner(resultSet.getString("username"))
-                    .password(resultSet.getString("password"))
-                    .readByAll(resultSet.getInt("read") == 1)
-                    .writeByAll(resultSet.getInt("write") == 1)
-                    .build();
-        } else {
-            throw new NotFoundException("Vault not found");
         }
     }
 
@@ -61,7 +57,7 @@ public class MessagesDaoImpl implements MessagesDao {
             preparedStatement.setInt(1, vaultId);
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Message> messages = new ArrayList<>();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Message message = Message.builder()
                         .id(resultSet.getInt("id"))
                         .idVault(vaultId)
@@ -72,7 +68,8 @@ public class MessagesDaoImpl implements MessagesDao {
                                 .build())
                         .build();
                 messages.add(message);
-            } else {
+            }
+            if (messages.isEmpty()){
                 log.warn(Constantes.MESSAGE_NOT_FOUND);
                 throw new NotFoundException(Constantes.MESSAGE_NOT_FOUND);
             }
@@ -111,17 +108,17 @@ public class MessagesDaoImpl implements MessagesDao {
     }
 
     @Override
-    public Message updateMessage(int messageId, Message message) {
+    public Message updateMessage(Message message) {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatementUpdateMessage = connection.prepareStatement(SQLQueries.UPDATE_MESSAGE_QUERY)) {
 
             preparedStatementUpdateMessage.setString(1, message.getContentCiphed().getIv());
             preparedStatementUpdateMessage.setString(2, message.getContentCiphed().getSalt());
             preparedStatementUpdateMessage.setString(3, message.getContentCiphed().getCipherText());
-            preparedStatementUpdateMessage.setInt(4, messageId);
+            preparedStatementUpdateMessage.setInt(4, message.getId());
             if (preparedStatementUpdateMessage.executeUpdate() == 1) {
                 return Message.builder()
-                        .id(messageId)
+                        .id(message.getId())
                         .contentCiphed(message.getContentCiphed())
                         .build();
             } else {

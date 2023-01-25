@@ -32,15 +32,7 @@ public class VaultsDaoImpl implements VaultsDao {
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Vault vault = Vault.builder()
-                        .id(resultSet.getInt(Constantes.ID))
-                        .name(resultSet.getString(Constantes.NAME))
-                        .usernameOwner(resultSet.getString(Constantes.USERNAME))
-                        .password(resultSet.getString(Constantes.PASSWORD))
-                        .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
-                        .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
-                        .build();
-                vaults.add(vault);
+                vaults.add(getVault(resultSet));
             }
             if (vaults.isEmpty()) {
                 throw new NotFoundException("No vaults found");
@@ -55,25 +47,48 @@ public class VaultsDaoImpl implements VaultsDao {
     @Override
     public Vault getVault(int vaultId) {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT_BY_ID)) {
             preparedStatement.setInt(1, vaultId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Vault.builder()
-                        .id(resultSet.getInt(Constantes.ID))
-                        .name(resultSet.getString(Constantes.NAME))
-                        .usernameOwner(resultSet.getString(Constantes.USERNAME))
-                        .password(resultSet.getString(Constantes.PASSWORD))
-                        .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
-                        .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
-                        .build();
+                return getVault(resultSet);
             } else {
-                throw new NotFoundException("No vault found or wrong vaultId");
+                throw new NotFoundException("Vault not found");
+            }
+
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DatabaseException(Constantes.DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public Vault getVault(String username, String name) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT_BY_NAME)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return getVault(resultSet);
+            } else {
+                throw new NotFoundException("Vault not found");
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
             throw new DatabaseException(Constantes.DATABASE_ERROR);
         }
+    }
+
+    private Vault getVault(ResultSet resultSet) throws SQLException {
+        return Vault.builder()
+                .id(resultSet.getInt(Constantes.ID))
+                .name(resultSet.getString(Constantes.NAME))
+                .usernameOwner(resultSet.getString(Constantes.USERNAME))
+                .password(resultSet.getString(Constantes.PASSWORD))
+                .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
+                .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
+                .build();
     }
 
     @Override

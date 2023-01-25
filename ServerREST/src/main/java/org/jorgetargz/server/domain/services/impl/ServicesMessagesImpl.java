@@ -29,15 +29,15 @@ public class ServicesMessagesImpl implements ServicesMessages {
 
     @Override
     public List<Message> getMessages(Vault credentials, String usernameReader) {
-        Vault vault = vaultsDao.getVault(credentials.getId());
         String password = new String(decoder.decode(credentials.getPassword()));
         String username = new String(decoder.decode(credentials.getUsernameOwner()));
         String name = new String(decoder.decode(credentials.getName()));
+        Vault vault = vaultsDao.getVault(username, name);
         if (vault.getName().equals(name)
                 && vault.getUsernameOwner().equals(username)
                 && passwordHash.verify(password.toCharArray(), vault.getPassword())) {
             if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
-                return messageDao.getMessages(credentials.getId());
+                return messageDao.getMessages(vault.getId());
             } else {
                 throw new ValidationException("You don't have permission to read this vault");
             }
@@ -59,7 +59,7 @@ public class ServicesMessagesImpl implements ServicesMessages {
     public Message updateMessage(Message message, String password, String usernameReader) {
         password = new String(decoder.decode(password));
         checkPermsionToWrite(vaultsDao.getVault(message.getIdVault()), password, usernameReader);
-        return messageDao.updateMessage(message.getId(), message);
+        return messageDao.updateMessage(message);
     }
 
     private void checkPermsionToWrite(Vault vault, String password, String usernameReader) {

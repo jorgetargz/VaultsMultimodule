@@ -13,7 +13,7 @@ public interface MessagesDao {
 
     Message createMessage(int vaultId, Message message);
 
-    Message updateMessage(int messageId, Message message);
+    Message updateMessage(Message message);
 
     void deleteMessage(int messageId);
 }

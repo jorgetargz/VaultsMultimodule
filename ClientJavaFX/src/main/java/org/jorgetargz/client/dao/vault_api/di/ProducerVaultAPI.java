@@ -1,17 +1,16 @@
 package org.jorgetargz.client.dao.vault_api.di;
 
 import com.google.gson.Gson;
-import org.jorgetargz.client.dao.vault_api.LoginAPI;
-import org.jorgetargz.client.dao.vault_api.MessagesAPI;
-import org.jorgetargz.client.dao.vault_api.UsersAPI;
-import org.jorgetargz.client.dao.vault_api.VaultAPI;
-import org.jorgetargz.client.dao.vault_api.utils.AuthorizationInterceptor;
-import org.jorgetargz.client.dao.vault_api.config.ConfigVaultAPI;
-import org.jorgetargz.client.dao.vault_api.utils.CacheAuthorization;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import org.jorgetargz.client.dao.vault_api.LoginAPI;
+import org.jorgetargz.client.dao.vault_api.MessagesAPI;
+import org.jorgetargz.client.dao.vault_api.UsersAPI;
+import org.jorgetargz.client.dao.vault_api.VaultAPI;
+import org.jorgetargz.client.dao.vault_api.config.ConfigVaultAPI;
+import org.jorgetargz.client.dao.vault_api.utils.AuthorizationInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,11 +22,11 @@ public class ProducerVaultAPI {
 
     @Produces
     @Singleton
-    public Retrofit getRetrofit(ConfigVaultAPI configVaultAPI, CacheAuthorization cache, Gson gson) {
+    public Retrofit getRetrofit(ConfigVaultAPI configVaultAPI, AuthorizationInterceptor authorizationInterceptor, Gson gson) {
 
         OkHttpClient clientOK = new OkHttpClient.Builder()
                 .connectionPool(new ConnectionPool(1, 1, TimeUnit.SECONDS))
-                .addInterceptor(new AuthorizationInterceptor(cache))
+                .addInterceptor(authorizationInterceptor)
                 .build();
 
         return new Retrofit.Builder()

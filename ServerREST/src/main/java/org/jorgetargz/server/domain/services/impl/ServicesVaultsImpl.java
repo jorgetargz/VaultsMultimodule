@@ -2,9 +2,11 @@ package org.jorgetargz.server.domain.services.impl;
 
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
+import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.security.Encriptacion;
 import org.jorgetargz.server.dao.MessagesDao;
 import org.jorgetargz.server.dao.VaultsDao;
+import org.jorgetargz.server.dao.excepciones.NotFoundException;
 import org.jorgetargz.server.domain.services.ServicesVaults;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import org.jorgetargz.utils.modelo.*;
@@ -12,6 +14,7 @@ import org.jorgetargz.utils.modelo.*;
 import java.util.Base64;
 import java.util.List;
 
+@Log4j2
 public class ServicesVaultsImpl implements ServicesVaults {
 
     private final VaultsDao vaultsDao;
@@ -46,17 +49,21 @@ public class ServicesVaultsImpl implements ServicesVaults {
         Vault vault = vaultsDao.getVault(vaultId);
         if (passwordHash.verify(credentials.getPassword().toCharArray(), vault.getPassword())
                 && vault.getUsernameOwner().equals(usernameReader)) {
-            List<Message> messages = messageDao.getMessages(vaultId);
-            for (Message message : messages) {
-                String messageText = encriptacion.desencriptar(message.getContentCiphed(), credentials.getPassword());
-                ContentCiphed contentCiphed = encriptacion.encriptar(messageText, password);
-                message.setContentCiphed(contentCiphed);
-                messageDao.updateMessage(message.getId(), message);
+            try {
+                List<Message> messages = messageDao.getMessages(vaultId);
+                for (Message message : messages) {
+                    String messageText = encriptacion.desencriptar(message.getContentCiphed(), credentials.getPassword());
+                    ContentCiphed contentCiphed = encriptacion.encriptar(messageText, newPssword);
+                    message.setContentCiphed(contentCiphed);
+                    messageDao.updateMessage(message);
+                }
+            } catch (NotFoundException e) {
+                log.info("No messages found for vault while changing vault password");
             }
             newPssword = passwordHash.generate(newPssword.toCharArray());
             vaultsDao.changePassword(vaultId, newPssword);
         } else {
-            throw new ValidationException("Wrong password");
+            throw new ValidationException("You are not the owner of this vault");
         }
     }
 

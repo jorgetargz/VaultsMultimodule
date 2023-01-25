@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MessagesServices {
 
-    Single<Either<String, List<Message>>> getAll(int vaultId, String vaultName, String username, String password);
+    Single<Either<String, List<Message>>> getAll(String vaultName, String username, String password);
 
     Single<Either<String, Message>> save(Message message, String password);
 

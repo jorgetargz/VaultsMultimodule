@@ -1,5 +1,6 @@
 package org.jorgetargz.client.dao.vault_api.utils;
 
+import jakarta.inject.Inject;
 import org.jorgetargz.client.dao.common.Constantes;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -13,7 +14,7 @@ public class AuthorizationInterceptor implements Interceptor {
 
     private final CacheAuthorization ca;
 
-
+    @Inject
     public AuthorizationInterceptor(CacheAuthorization ca) {
         this.ca = ca;
     }

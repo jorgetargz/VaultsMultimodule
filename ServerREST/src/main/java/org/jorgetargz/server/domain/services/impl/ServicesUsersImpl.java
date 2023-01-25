@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.utils.modelo.User;
 
 import java.io.Serializable;
+import java.util.Base64;
 
 @Log4j2
 public class ServicesUsersImpl implements ServicesUsers, Serializable {
@@ -66,6 +67,7 @@ public class ServicesUsersImpl implements ServicesUsers, Serializable {
 
     @Override
     public void scDelete(String username) {
+        username = new String(Base64.getDecoder().decode(username));
         daoLogin.delete(username);
     }
 

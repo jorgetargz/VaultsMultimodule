@@ -33,12 +33,12 @@ public class ConstantesAPI {
     public static final String ENDPOINT_VAULT_DELETE = PATH_VAULTS + VAULT_ID_PATH_PARAM;
 
     //ENDPOINTS MESSAGES
-    public static final String ENDPOINT_GET_MESSAGES = PATH_MESSAGES + VAULT_PATH + VAULT_ID_PATH_PARAM;
-    public static final String ENDPOINT_MESSAGE = PATH_MESSAGES;
+    public static final String ENDPOINT_MESSAGES = PATH_MESSAGES;
     public static final String ENDPOINT_MESSAGE_DELETE = PATH_MESSAGES + MESSAGE_ID_PATH_PARAM;
 
     //ENDPOINTS USERS
     public static final String ENDPOINT_USERS = PATH_USERS;
+    public static final String ENDPOINT_USER_DELETE = PATH_USERS + USERNAME_PATH_PARAM;
 
     //Roles
     public static final String ROLE_ADMIN = "ADMIN";

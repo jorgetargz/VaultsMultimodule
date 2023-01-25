@@ -16,7 +16,7 @@ public interface VaultAPI {
     @POST(ConstantesAPI.ENDPOINT_VAULT)
     Single<Vault> createVault(@Body Vault vault);
 
-    @PATCH(ConstantesAPI.ENDPOINT_VAULT_CHANGE_PASSWORD)
+    @POST(ConstantesAPI.ENDPOINT_VAULT_CHANGE_PASSWORD)
     Single<Response<Void>> changePassword(@Body Vault credentials, @Query("password") String password);
 
     @DELETE(ConstantesAPI.ENDPOINT_VAULT_DELETE)

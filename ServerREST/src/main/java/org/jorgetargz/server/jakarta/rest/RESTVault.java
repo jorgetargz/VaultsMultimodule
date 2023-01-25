@@ -41,7 +41,7 @@ public class RESTVault {
         return servicesVaults.createVault(vault);
     }
 
-    @PATCH
+    @POST
     @RolesAllowed(ConstantesAPI.ROLE_USER)
     @Path(ConstantesAPI.VAULT_CHANGE_PASSWORD_PATH)
     public Response changePassword(Vault credentials, @QueryParam("password") String password) {

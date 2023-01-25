@@ -9,6 +9,8 @@ public interface VaultsDao {
 
     Vault getVault(int vaultId);
 
+    Vault getVault(String username, String name);
+
     Vault createVault(Vault vault);
 
     void changePassword(int vaultId, String newPassword);

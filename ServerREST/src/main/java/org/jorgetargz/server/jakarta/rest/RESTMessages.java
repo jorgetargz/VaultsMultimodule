@@ -30,11 +30,9 @@ public class RESTMessages {
     }
 
     @GET
-    @Path(ConstantesAPI.VAULT_PATH + ConstantesAPI.VAULT_ID_PATH_PARAM)
     @RolesAllowed(ConstantesAPI.ROLE_USER)
-    public List<Message> getMessages(@PathParam(ConstantesAPI.VAULT_ID_PARAM) int vaultId, @QueryParam("vaultName") String vaultName, @QueryParam("usernameOwner") String usernameOwner, @QueryParam("password") String password) {
+    public List<Message> getMessages(@QueryParam("vaultName") String vaultName, @QueryParam("usernameOwner") String usernameOwner, @QueryParam("password") String password) {
         Vault credentials = Vault.builder()
-                .id(vaultId)
                 .name(vaultName)
                 .usernameOwner(usernameOwner)
                 .password(password)

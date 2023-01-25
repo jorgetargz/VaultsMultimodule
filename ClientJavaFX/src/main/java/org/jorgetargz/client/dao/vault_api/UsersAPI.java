@@ -14,7 +14,7 @@ public interface UsersAPI {
     @POST(ConstantesAPI.ENDPOINT_USERS)
     Single<User> create(@Body User user);
 
-    @DELETE(ConstantesAPI.ENDPOINT_USERS)
+    @DELETE(ConstantesAPI.ENDPOINT_USER_DELETE)
     Single<Response<Void>> delete(@Path(ConstantesAPI.USERNAME_PARAM) String username);
 
 }
