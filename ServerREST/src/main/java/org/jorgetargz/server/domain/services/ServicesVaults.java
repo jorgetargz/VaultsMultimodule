@@ -1,8 +1,6 @@
 package org.jorgetargz.server.domain.services;
 
-import org.jorgetargz.utils.modelo.Message;
-import org.jorgetargz.utils.modelo.Vault;
-import org.jorgetargz.utils.modelo.VaultCredential;
+import org.jorgetargz.utils.modelo.*;
 
 import java.util.List;
 
@@ -12,13 +10,7 @@ public interface ServicesVaults {
 
     Vault createVault(Vault vault);
 
-    List<Message> getMessages(VaultCredential vaultCredential);
+    void changePassword(Vault credentials, String password, String usernameReader);
 
-    Message createMessage(VaultCredential vaultCredential, String message);
-
-    Message updateMessage(VaultCredential vaultCredential, String message, int messageId);
-
-    Message deleteMessage(VaultCredential vaultCredential, int messageId);
-
-    Vault changePassword(VaultCredential vault, String newPassword);
+    void deleteVault(int vaultId, String usernameReader);
 }

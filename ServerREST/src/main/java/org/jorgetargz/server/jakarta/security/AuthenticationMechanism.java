@@ -49,7 +49,12 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
                 String tipo = headerFields[0];
                 String valor = headerFields[1];
                 if (tipo.equals(Constantes.BASIC)) {
-                    credentialValidationResult = basicAuthentication(httpServletResponse, valor);
+                    credentialValidationResult = identity.validate(new BasicAuthenticationCredential(valor));
+                    // Si el usuario es válido, se crea un JWT y se añade al header de la respuesta
+                    if (credentialValidationResult.getStatus() == CredentialValidationResult.Status.VALID) {
+                        httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION,
+                                String.format(Constantes.BEARER_AUTH, createJWT(credentialValidationResult)));
+                    }
                 } else if (tipo.equals(Constantes.BEARER)) {
                     credentialValidationResult = jwtAuthentication(httpServletResponse, valor);
                 }
@@ -57,16 +62,6 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
         }
 
         return getAuthenticationStatus(httpServletRequest, httpMessageContext, credentialValidationResult);
-    }
-
-    private CredentialValidationResult basicAuthentication(HttpServletResponse httpServletResponse, String valor) {
-        CredentialValidationResult credentialValidationResult;
-        credentialValidationResult = identity.validate(new BasicAuthenticationCredential(valor));
-        if (credentialValidationResult.getStatus() == CredentialValidationResult.Status.VALID) {
-            String jwt = createJWT(credentialValidationResult);
-            httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION, String.format(Constantes.BEARER_AUTH, jwt));
-        }
-        return credentialValidationResult;
     }
 
     private String createJWT(CredentialValidationResult credentialValidationResult) {
@@ -158,7 +153,7 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
             if (credentialValidationResult.getStatus() == CredentialValidationResult.Status.INVALID) {
                 httpServletRequest.setAttribute(Constantes.ERROR_LOGIN, Constantes.INVALID_CREDENTIALS);
             } else if (credentialValidationResult.getStatus() == CredentialValidationResult.Status.NOT_VALIDATED) {
-                httpServletRequest.setAttribute(Constantes.ERROR_LOGIN, Constantes.EMAIL_IS_NOT_VERIFIED);
+                httpServletRequest.setAttribute(Constantes.ERROR_LOGIN, Constantes.SERVER_ERROR);
             }
 
         } else {

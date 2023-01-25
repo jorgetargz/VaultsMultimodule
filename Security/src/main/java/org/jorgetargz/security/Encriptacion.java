@@ -1,9 +1,11 @@
 package org.jorgetargz.security;
 
+import org.jorgetargz.utils.modelo.ContentCiphed;
+
 public interface Encriptacion {
 
-    String encriptar(String texto, String secret);
+    ContentCiphed encriptar(String texto, String secret);
 
-    String desencriptar(String texto, String secret);
+    String desencriptar(ContentCiphed contentCiphed, String secret);
 
 }

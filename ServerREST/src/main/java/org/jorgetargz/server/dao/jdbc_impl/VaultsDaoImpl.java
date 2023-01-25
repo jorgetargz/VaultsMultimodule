@@ -8,14 +8,9 @@ import org.jorgetargz.server.dao.common.Constantes;
 import org.jorgetargz.server.dao.excepciones.DatabaseException;
 import org.jorgetargz.server.dao.excepciones.NotFoundException;
 import org.jorgetargz.server.dao.utils.SQLQueries;
-import org.jorgetargz.utils.modelo.Message;
 import org.jorgetargz.utils.modelo.Vault;
-import org.jorgetargz.utils.modelo.VaultCredential;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,17 +32,18 @@ public class VaultsDaoImpl implements VaultsDao {
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Vault vault = new Vault();
-                vault.setId(resultSet.getInt(Constantes.ID));
-                vault.setName(resultSet.getString(Constantes.NAME));
-                vault.setUsername(resultSet.getString(Constantes.USERNAME));
-                vault.setPassword(resultSet.getString(Constantes.PASSWORD));
-                vault.setReadByAll(resultSet.getBoolean(Constantes.READ_BY_ALL));
-                vault.setWriteByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL));
+                Vault vault = Vault.builder()
+                        .id(resultSet.getInt(Constantes.ID))
+                        .name(resultSet.getString(Constantes.NAME))
+                        .usernameOwner(resultSet.getString(Constantes.USERNAME))
+                        .password(resultSet.getString(Constantes.PASSWORD))
+                        .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
+                        .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
+                        .build();
                 vaults.add(vault);
             }
             if (vaults.isEmpty()) {
-                throw new NotFoundException("No vaults found or wrong username/password");
+                throw new NotFoundException("No vaults found");
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -57,49 +53,23 @@ public class VaultsDaoImpl implements VaultsDao {
     }
 
     @Override
-    public Vault getVault(VaultCredential vaultCredential) {
+    public Vault getVault(int vaultId) {
         try (Connection connection = dbConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT)) {
-            preparedStatement.setString(1, vaultCredential.getVaultName());
-            preparedStatement.setString(2, vaultCredential.getUsernameOwner());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_VAULT)) {
+            preparedStatement.setInt(1, vaultId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Vault vault = new Vault();
-                vault.setId(resultSet.getInt("id"));
-                vault.setName(resultSet.getString("name"));
-                vault.setUsername(resultSet.getString("username"));
-                vault.setPassword(resultSet.getString("password"));
-                vault.setReadByAll(resultSet.getInt("read") == 1);
-                vault.setWriteByAll(resultSet.getInt("write") == 1);
-                return vault;
+                return Vault.builder()
+                        .id(resultSet.getInt(Constantes.ID))
+                        .name(resultSet.getString(Constantes.NAME))
+                        .usernameOwner(resultSet.getString(Constantes.USERNAME))
+                        .password(resultSet.getString(Constantes.PASSWORD))
+                        .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
+                        .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
+                        .build();
             } else {
-                throw new NotFoundException("Vault not found");
+                throw new NotFoundException("No vault found or wrong vaultId");
             }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new DatabaseException(Constantes.DATABASE_ERROR);
-        }
-    }
-
-    @Override
-    public List<Message> getMessages(VaultCredential vaultCredential) {
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.SELECT_MESSAGES_QUERY)) {
-            preparedStatement.setString(1, vaultCredential.getVaultName());
-            preparedStatement.setString(2, vaultCredential.getUsernameOwner());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            List<Message> messages = new ArrayList<>();
-            if (resultSet.next()) {
-                Message message = new Message();
-                message.setId(resultSet.getInt("id"));
-                message.setIdVault(resultSet.getInt("vaultId"));
-                message.setMessage(resultSet.getString("message"));
-                messages.add(message);
-            } else {
-                log.warn(Constantes.MESSAGE_NOT_FOUND);
-                throw new NotFoundException(Constantes.MESSAGE_NOT_FOUND);
-            }
-            return messages;
         } catch (SQLException e) {
             log.error(e.getMessage());
             throw new DatabaseException(Constantes.DATABASE_ERROR);
@@ -109,9 +79,9 @@ public class VaultsDaoImpl implements VaultsDao {
     @Override
     public Vault createVault(Vault vault) {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.INSERT_VAULT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.INSERT_VAULT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, vault.getName());
-            preparedStatement.setString(2, vault.getUsername());
+            preparedStatement.setString(2, vault.getUsernameOwner());
             preparedStatement.setString(3, vault.getPassword());
             preparedStatement.setInt(4, vault.isReadByAll() ? 1 : 0);
             preparedStatement.setInt(5, vault.isWriteByAll() ? 1 : 0);
@@ -130,98 +100,12 @@ public class VaultsDaoImpl implements VaultsDao {
     }
 
     @Override
-    public Message createMessage(VaultCredential vaultCredential, String message) {
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatementGetVault = connection.prepareStatement(SQLQueries.SELECT_VAULT);
-             PreparedStatement preparedStatementInsertMessage = connection.prepareStatement(SQLQueries.INSERT_MESSAGE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            preparedStatementGetVault.setString(1, vaultCredential.getVaultName());
-            preparedStatementGetVault.setString(2, vaultCredential.getUsernameOwner());
-            ResultSet resultSet = preparedStatementGetVault.executeQuery();
-            if (resultSet.next()) {
-                preparedStatementInsertMessage.setInt(1, resultSet.getInt("id"));
-                preparedStatementInsertMessage.setString(2, message);
-                preparedStatementInsertMessage.executeUpdate();
-                ResultSet resultSetMessage = preparedStatementInsertMessage.getGeneratedKeys();
-                if (resultSetMessage.next()) {
-                    Message message1 = new Message();
-                    message1.setId(resultSetMessage.getInt(1));
-                    message1.setIdVault(resultSet.getInt("id"));
-                    message1.setMessage(message);
-                    return message1;
-                } else {
-                    throw new DatabaseException(Constantes.DATABASE_ERROR);
-                }
-            } else {
-                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new DatabaseException(Constantes.DATABASE_ERROR);
-        }
-    }
-
-    @Override
-    public Message updateMessage(VaultCredential vaultCredential, String message, int messageId) {
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatementGetVault = connection.prepareStatement(SQLQueries.SELECT_VAULT);
-             PreparedStatement preparedStatementUpdateMessage = connection.prepareStatement(SQLQueries.UPDATE_MESSAGE_QUERY)) {
-
-            preparedStatementGetVault.setString(1, vaultCredential.getVaultName());
-            preparedStatementGetVault.setString(2, vaultCredential.getUsernameOwner());
-            ResultSet resultSetVault = preparedStatementGetVault.executeQuery();
-            if (resultSetVault.next()) {
-                preparedStatementUpdateMessage.setString(1, message);
-                preparedStatementUpdateMessage.setInt(2, messageId);
-                if (preparedStatementUpdateMessage.executeUpdate() == 1) {
-                    Message message1 = new Message();
-                    message1.setId(messageId);
-                    message1.setIdVault(resultSetVault.getInt("id"));
-                    message1.setMessage(message);
-                    return message1;
-                } else {
-                    throw new NotFoundException("Message not found");
-                }
-            } else {
-                throw new NotFoundException("Vault not found");
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new DatabaseException(Constantes.DATABASE_ERROR);
-        }
-    }
-
-    @Override
-    public Message deleteMessage(VaultCredential vaultCredential, int messageId) {
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatementDeleteMessage = connection.prepareStatement(SQLQueries.DELETE_MESSAGE_QUERY)) {
-
-            preparedStatementDeleteMessage.setInt(1, messageId);
-            if (preparedStatementDeleteMessage.executeUpdate() == 1) {
-                Message message1 = new Message();
-                message1.setId(messageId);
-                return message1;
-            } else {
-                throw new NotFoundException("Message not found");
-            }
-
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new DatabaseException(Constantes.DATABASE_ERROR);
-        }
-    }
-
-    @Override
-    public Vault changePassword(Vault vault, String newPassword) {
+    public void changePassword(int vaultId, String newPassword) {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.UPDATE_VAULT_PASSWORD_QUERY)) {
             preparedStatement.setString(1, newPassword);
-            preparedStatement.setInt(2, vault.getId());
-            preparedStatement.setString(3, vault.getUsername());
-            if (preparedStatement.executeUpdate() == 1) {
-                vault.setPassword(newPassword);
-                return vault;
-            } else {
+            preparedStatement.setInt(2, vaultId);
+            if (preparedStatement.executeUpdate() != 1) {
                 throw new NotFoundException("Vault not found");
             }
         } catch (SQLException e) {
@@ -230,5 +114,25 @@ public class VaultsDaoImpl implements VaultsDao {
         }
     }
 
-
+    @Override
+    public void deleteVault(int vaultId) {
+        try (Connection connection = dbConnection.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_MESSAGES_QUERY)) {
+                preparedStatement.setInt(1, vaultId);
+                preparedStatement.executeUpdate();
+            }
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_VAULT_QUERY)) {
+                preparedStatement.setInt(1, vaultId);
+                if (preparedStatement.executeUpdate() == 1) {
+                    connection.commit();
+                } else {
+                    throw new NotFoundException("Vault not found");
+                }
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DatabaseException(Constantes.DATABASE_ERROR);
+        }
+    }
 }

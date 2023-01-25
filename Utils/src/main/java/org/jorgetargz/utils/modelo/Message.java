@@ -1,10 +1,13 @@
 package org.jorgetargz.utils.modelo;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
 public class Message {
     private int id;
     private int idVault;
-    private String message;
+    private ContentCiphed contentCiphed;
 }

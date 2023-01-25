@@ -1,7 +1,7 @@
 package org.jorgetargz.client.gui.screens.login;
 
-import org.jorgetargz.utils.modelo.Login;
+import org.jorgetargz.utils.modelo.User;
 
-public record LoginState(Login login, String error, boolean readerRegistered, boolean isLoading,
+public record LoginState(User user, String error, boolean readerRegistered, boolean isLoading,
                          boolean isLoaded) {
 }

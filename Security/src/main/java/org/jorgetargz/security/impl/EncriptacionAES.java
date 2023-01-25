@@ -1,8 +1,9 @@
 package org.jorgetargz.security.impl;
 
-import com.google.common.primitives.Bytes;
 import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.security.Encriptacion;
+import org.jorgetargz.utils.modelo.ContentCiphed;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -14,8 +15,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
-import java.util.Base64;
 
 @Log4j2
 public class EncriptacionAES implements Encriptacion {
@@ -27,24 +26,28 @@ public class EncriptacionAES implements Encriptacion {
     private static final int KEY_LENGTH = 256;
     private static final int SALT_LENGTH = 16;
     private static final int IV_LENGTH = 12;
-    private static final int SALT_IV_LENGTH = SALT_LENGTH + IV_LENGTH;
     private static final int TAG_LENGTH = 128;
 
     @Override
-    public String encriptar(String strToEncrypt, String secret) {
+    public ContentCiphed encriptar(String strToEncrypt, String secret) {
         try {
             byte[] iv = new byte[IV_LENGTH];
             byte[] salt = new byte[SALT_LENGTH];
             SecureRandom sr = new SecureRandom();
+            sr.nextBytes(iv);
             sr.nextBytes(salt);
+
             GCMParameterSpec parameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
-
             SecretKeySpec secretKey = getSecretKeySpec(secret, salt);
-
             Cipher cipher = Cipher.getInstance(AES_GCM_NO_PADDING);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
-            return Base64.getUrlEncoder().encodeToString(Bytes.concat(iv, salt,
-                    cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8))));
+            byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8));
+
+            ContentCiphed contentCiphed = new ContentCiphed();
+            contentCiphed.setIv(iv);
+            contentCiphed.setSalt(salt);
+            contentCiphed.setCipherText(cipherText);
+            return contentCiphed;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -52,12 +55,10 @@ public class EncriptacionAES implements Encriptacion {
     }
 
     @Override
-    public String desencriptar(String strToDecrypt, String secret) {
+    public String desencriptar(ContentCiphed contentCiphed, String secret) {
         try {
-            byte[] decoded = Base64.getUrlDecoder().decode(strToDecrypt);
-
-            byte[] iv = Arrays.copyOfRange(decoded, 0, IV_LENGTH);
-            byte[] salt = Arrays.copyOfRange(decoded, IV_LENGTH, SALT_IV_LENGTH);
+            byte[] iv = contentCiphed.getIv();
+            byte[] salt = contentCiphed.getSalt();
 
             GCMParameterSpec parameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
 
@@ -65,7 +66,7 @@ public class EncriptacionAES implements Encriptacion {
 
             Cipher cipher = Cipher.getInstance(AES_GCM_NO_PADDING);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
-            return new String(cipher.doFinal(Arrays.copyOfRange(decoded, SALT_IV_LENGTH, decoded.length)), StandardCharsets.UTF_8);
+            return new String(cipher.doFinal(contentCiphed.getCipherText()), StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

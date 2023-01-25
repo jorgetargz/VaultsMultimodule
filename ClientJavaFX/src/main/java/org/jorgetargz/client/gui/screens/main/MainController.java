@@ -21,7 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
-import org.jorgetargz.utils.modelo.Login;
+import org.jorgetargz.utils.modelo.User;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -48,7 +48,7 @@ public class MainController {
     @FXML
     public MenuBar menuPrincipal;
 
-    private Login user;
+    private User user;
 
     private final MainViewModel mainViewModel;
 
@@ -59,7 +59,7 @@ public class MainController {
         alert = new Alert(Alert.AlertType.NONE);
     }
 
-    public Login getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -67,7 +67,7 @@ public class MainController {
         return root;
     }
 
-    public void setUser(Login user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -5,6 +5,7 @@ public class Constantes {
     private Constantes() {
     }
 
+
     public static final String TOKEN_IN_BLACK_LIST = "Token in black list";
 
     public static final int EXPIRATION_TIME_MINUTES_IN_THE_FUTURE = 5;
@@ -14,7 +15,7 @@ public class Constantes {
     public static final String BASIC = "Basic";
     public static final String WHITE_SPACE = " ";
     public static final String ERROR_LOGIN = "LOGIN_ERROR";
-    public static final String EMAIL_IS_NOT_VERIFIED = "Email is not verified";
+    public static final String SERVER_ERROR = "Server error";
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
     public static final String LOGIN_REQUIRED = "Login required probably because of expired jwt";
     public static final String BEARER = "Bearer";
@@ -26,5 +27,5 @@ public class Constantes {
     public static final String API_AUTH = "API Auth";
     public static final String NOMBRE = "Nombre";
     public static final String ROLES = "Roles";
-    public static final String KEY_ID = "NewspapersAPI";
+    public static final String KEY_ID = "VaultsAPI";
 }

@@ -1,5 +1,6 @@
 module ClientJavaFX {
     requires Utils;
+    requires Security;
 
     requires javafx.graphics;
     requires javafx.controls;

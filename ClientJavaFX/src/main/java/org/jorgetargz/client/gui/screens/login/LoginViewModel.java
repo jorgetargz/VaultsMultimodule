@@ -7,7 +7,7 @@ import jakarta.inject.Inject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.jorgetargz.utils.modelo.Login;
+import org.jorgetargz.utils.modelo.User;
 
 public class LoginViewModel {
 
@@ -44,9 +44,9 @@ public class LoginViewModel {
     public void doRegister(String inputUsername, String inputPassword) {
         if (inputUsername != null && !inputUsername.isEmpty()
                 && inputPassword != null && !inputPassword.isEmpty()) {
-            Login login = new Login(inputUsername, inputPassword, "USER");
+            User user = new User(inputUsername, inputPassword, "USER");
             state.set(new LoginState(null, null, false, true, false));
-            loginServices.scRegisterUser(login)
+            loginServices.scRegisterUser(user)
                     .subscribeOn(Schedulers.single())
                     .subscribe(either -> {
                         if (either.isLeft())

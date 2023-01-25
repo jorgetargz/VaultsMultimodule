@@ -52,16 +52,14 @@ public class LoginController extends BaseScreenController {
                     loginViewModel.clenState();
                 });
             }
-            if (newState.login() != null) {
+            if (newState.user() != null) {
                 Platform.runLater(() -> {
-                    this.getPrincipalController().setUser(newState.login());
+                    this.getPrincipalController().setUser(newState.user());
                     this.getPrincipalController().onLoginDone();
                 });
             }
             if (newState.readerRegistered()) {
-                Platform.runLater(() -> {
-                    loginViewModel.clenState();
-                });
+                Platform.runLater(loginViewModel::clenState);
             }
             if (newState.isLoading()) {
                 this.getPrincipalController().getRootPane().setCursor(javafx.scene.Cursor.WAIT);

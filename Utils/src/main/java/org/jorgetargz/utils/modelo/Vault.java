@@ -1,12 +1,15 @@
 package org.jorgetargz.utils.modelo;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
 public class Vault {
     private int id;
     private String name;
-    private String username;
+    private String usernameOwner;
     private String password;
     private boolean readByAll;
     private boolean writeByAll;

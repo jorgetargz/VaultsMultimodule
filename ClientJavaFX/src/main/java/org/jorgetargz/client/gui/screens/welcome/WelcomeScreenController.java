@@ -7,7 +7,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
-import org.jorgetargz.utils.modelo.Login;
+import org.jorgetargz.utils.modelo.User;
 
 public class WelcomeScreenController extends BaseScreenController {
 
@@ -28,7 +28,7 @@ public class WelcomeScreenController extends BaseScreenController {
 
     @Override
     public void principalCargado() {
-        Login user = getPrincipalController().getUser();
+        User user = getPrincipalController().getUser();
         String welcome = ScreenConstants.WELCOME_MESSAGE + user.getUsername();
         lbBienvenido.setText(welcome);
         animarPantalla();
