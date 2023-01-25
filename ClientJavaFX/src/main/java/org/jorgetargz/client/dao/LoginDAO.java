@@ -11,5 +11,4 @@ public interface LoginDAO {
 
     Single<Either<String, Boolean>> logout(String authorization);
 
-    Single<Either<String, User>> registerReader(User user);
 }

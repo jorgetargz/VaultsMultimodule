@@ -11,8 +11,10 @@ public class ScreenConstants {
 
     public static final String FXML_LOGIN_SCREEN_FXML = "/fxml/logInScreen.fxml";
     public static final String FXML_WELCOME_SCREEN_FXML = "/fxml/welcomeScreen.fxml";
+    public static final String FXML_USERS_MANAGEMENT_SCREEN_FXML = "/fxml/usersManagementScreen.fxml";
 
     public static final String MENU_ITEM_PANTALLA_INICIO = "menuItemPantallaInicio";
+    public static final String MENU_ITEM_PANTALLA_USERS_MANAGEMENT = "menuItemUsersManagement";
 
     public static final String ABOUT = "About";
     public static final String ERROR = "Error";
@@ -23,12 +25,11 @@ public class ScreenConstants {
             Programación de servicios y procesos 2DAM
             IES Francisco de Quevedo""";
 
-    public static final String WELCOME_MESSAGE = "Newspaers REST API Client\nWelcome ";
+    public static final String WELCOME_MESSAGE = "Safe vaults REST API Client\nWelcome ";
     public static final String FILL_ALL_THE_INPUTS = "Fill all the inputs";
 
-    public static final String ID = "id";
     public static final String LOGOUT_SUCCESS = "Logout success";
-    public static final String GUEST = "Guest";
+    public static final String SUCCESS = "Success";
 
 
     private ScreenConstants() {

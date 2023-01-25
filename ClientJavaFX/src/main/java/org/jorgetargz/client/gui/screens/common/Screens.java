@@ -3,7 +3,8 @@ package org.jorgetargz.client.gui.screens.common;
 public enum Screens {
 
     WELCOME(ScreenConstants.FXML_WELCOME_SCREEN_FXML),
-    LOGIN(ScreenConstants.FXML_LOGIN_SCREEN_FXML);
+    LOGIN(ScreenConstants.FXML_LOGIN_SCREEN_FXML),
+    USER_MANAGEMENT(ScreenConstants.FXML_USERS_MANAGEMENT_SCREEN_FXML);
 
     private final String path;
 

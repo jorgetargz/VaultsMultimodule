@@ -23,10 +23,6 @@ public class LoginController extends BaseScreenController {
     @FXML
     private ImageView logo;
     @FXML
-    private MFXPasswordField passwordTxt;
-    @FXML
-    private MFXTextField usernameTxt;
-    @FXML
     private MFXTextField txtUsername;
     @FXML
     private MFXPasswordField txtPass;
@@ -58,14 +54,11 @@ public class LoginController extends BaseScreenController {
                     this.getPrincipalController().onLoginDone();
                 });
             }
-            if (newState.readerRegistered()) {
-                Platform.runLater(loginViewModel::clenState);
-            }
             if (newState.isLoading()) {
-                this.getPrincipalController().getRootPane().setCursor(javafx.scene.Cursor.WAIT);
+                Platform.runLater(() -> this.getPrincipalController().getRootPane().setCursor(Cursor.WAIT));
             }
             if (newState.isLoaded()) {
-                this.getPrincipalController().getRootPane().setCursor(Cursor.DEFAULT);
+                Platform.runLater(() -> this.getPrincipalController().getRootPane().setCursor(Cursor.DEFAULT));
             }
         });
     }
@@ -76,10 +69,5 @@ public class LoginController extends BaseScreenController {
         String username = txtUsername.getText();
         String password = txtPass.getText();
         loginViewModel.doLogin(username, password);
-    }
-
-    @FXML
-    private void doRegister() {
-        loginViewModel.doRegister(usernameTxt.getText(), passwordTxt.getText());
     }
 }

@@ -5,6 +5,7 @@ import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import org.jorgetargz.client.dao.UsersDAO;
 import org.jorgetargz.client.domain.services.UsersServices;
+import org.jorgetargz.utils.common.ConstantesAPI;
 import org.jorgetargz.utils.modelo.User;
 
 import java.util.Base64;
@@ -20,6 +21,7 @@ public class UsersServicesImpl implements UsersServices {
 
     @Override
     public Single<Either<String, User>> save(User user) {
+        user.setRole(ConstantesAPI.ROLE_USER);
         return usersDAO.save(user);
     }
 

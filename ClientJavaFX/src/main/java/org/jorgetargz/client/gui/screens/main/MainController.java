@@ -1,6 +1,7 @@
 package org.jorgetargz.client.gui.screens.main;
 
 
+import javafx.scene.control.Menu;
 import org.jorgetargz.client.gui.screens.common.BaseScreenController;
 import org.jorgetargz.client.gui.screens.common.ScreenConstants;
 import org.jorgetargz.client.gui.screens.common.Screens;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
+import org.jorgetargz.utils.common.ConstantesAPI;
 import org.jorgetargz.utils.modelo.User;
 
 import java.io.IOException;
@@ -47,6 +49,10 @@ public class MainController {
     private MFXFontIcon alwaysOnTopIcon;
     @FXML
     public MenuBar menuPrincipal;
+    @FXML
+    private Menu menuUsers;
+    @FXML
+    private Menu menuVaults;
 
     private User user;
 
@@ -69,6 +75,13 @@ public class MainController {
 
     public void setUser(User user) {
         this.user = user;
+        if (user.getRole().equals(ConstantesAPI.ROLE_ADMIN)) {
+            menuUsers.setVisible(true);
+            menuVaults.setVisible(false);
+        } else {
+            menuUsers.setVisible(false);
+            menuVaults.setVisible(true);
+        }
     }
 
     public void setStage(Stage stage) {
@@ -150,6 +163,7 @@ public class MainController {
     private void menuOnClick(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
             case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
+            case ScreenConstants.MENU_ITEM_PANTALLA_USERS_MANAGEMENT -> cargarPantalla(Screens.USER_MANAGEMENT);
             default -> cargarPantalla(Screens.LOGIN);
         }
     }

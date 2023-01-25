@@ -1,11 +1,11 @@
 package org.jorgetargz.client.dao.impl;
 
 import com.google.gson.Gson;
-import org.jorgetargz.client.dao.LoginDAO;
-import org.jorgetargz.client.dao.vault_api.LoginAPI;
 import io.reactivex.rxjava3.core.Single;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import org.jorgetargz.client.dao.LoginDAO;
+import org.jorgetargz.client.dao.vault_api.LoginAPI;
 import org.jorgetargz.utils.modelo.User;
 
 public class LoginDAOImpl extends GenericDAO implements LoginDAO {
@@ -28,8 +28,4 @@ public class LoginDAOImpl extends GenericDAO implements LoginDAO {
         return safeAPICallResponseVoid(loginAPI.logout(authorization));
     }
 
-    @Override
-    public Single<Either<String, User>> registerReader(User user) {
-        return safeAPICall(loginAPI.registerReader(user));
-    }
 }

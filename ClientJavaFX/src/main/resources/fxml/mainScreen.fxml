@@ -17,16 +17,25 @@
                 <HBox.margin>
                     <Insets right="200.0" top="20.0"/>
                 </HBox.margin>
-                <Menu fx:id="menuSesion" mnemonicParsing="false" text="Sesion">
+                <Menu fx:id="menuSesion" mnemonicParsing="false" text="%Session">
                     <MenuItem fx:id="menuItemPantallaInicio" mnemonicParsing="false" onAction="#menuOnClick"
                               text="%Main"/>
                     <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#logout" text="%CloseSession"/>
-                    <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#exit" text="Salir"/>
+                    <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#exit" text="%Salir"/>
                     <MenuItem fx:id="menuItemModoOscuro" mnemonicParsing="false" onAction="#cambiarcss"
                               text="%ChangeTheme"/>
                 </Menu>
-                <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="%Help">
                     <MenuItem fx:id="menuItemAcercaDe" mnemonicParsing="false" onAction="#acercaDe" text="%About"/>
+                </Menu>
+                <Menu fx:id="menuUsers" mnemonicParsing="false" text="%Users">
+                    <MenuItem fx:id="menuItemUsersManagement" mnemonicParsing="false" onAction="#menuOnClick" text="%UsersManagement"/>
+                </Menu>
+                <Menu fx:id="menuVaults" mnemonicParsing="false" text="%Vaults">
+                    <MenuItem fx:id="menuItemVaultOpen" mnemonicParsing="false" onAction="#menuOnClick" text="%OpenVault"/>
+                    <MenuItem fx:id="menuItemVaultCreate" mnemonicParsing="false" onAction="#menuOnClick" text="%CreateVault"/>
+                    <MenuItem fx:id="menuItemVaultDelete" mnemonicParsing="false" onAction="#menuOnClick" text="%DeleteVault"/>
+                    <MenuItem fx:id="menuItemVaultPasswordChange" mnemonicParsing="false" onAction="#menuOnClick" text="%ChangePasswordVault"/>
                 </Menu>
             </MenuBar>
             <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-lock" size="21.0" styleClass="always-on-top-icon"/>

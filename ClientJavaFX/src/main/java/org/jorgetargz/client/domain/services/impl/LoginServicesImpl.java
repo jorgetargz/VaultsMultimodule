@@ -1,13 +1,13 @@
 package org.jorgetargz.client.domain.services.impl;
 
-import org.jorgetargz.client.dao.LoginDAO;
-import org.jorgetargz.client.domain.services.LoginServices;
-import org.jorgetargz.client.dao.vault_api.utils.CacheAuthorization;
 import io.reactivex.rxjava3.core.Single;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
-import org.jorgetargz.utils.modelo.User;
 import okhttp3.Credentials;
+import org.jorgetargz.client.dao.LoginDAO;
+import org.jorgetargz.client.dao.vault_api.utils.CacheAuthorization;
+import org.jorgetargz.client.domain.services.LoginServices;
+import org.jorgetargz.utils.modelo.User;
 
 public class LoginServicesImpl implements LoginServices {
 
@@ -21,7 +21,7 @@ public class LoginServicesImpl implements LoginServices {
     }
 
     @Override
-    public Single<Either<String, User>> scGet(String username, String password) {
+    public Single<Either<String, User>> scLogin(String username, String password) {
         cache.setUser(username);
         cache.setPassword(password);
         return loginDAO.getReaderByLogin(Credentials.basic(username, password));
@@ -34,10 +34,5 @@ public class LoginServicesImpl implements LoginServices {
         cache.setPassword(null);
         cache.setJwtAuth(null);
         return loginDAO.logout(jwtAuth);
-    }
-
-    @Override
-    public Single<Either<String, User>> scRegisterUser(User user) {
-        return loginDAO.registerReader(user);
     }
 }
