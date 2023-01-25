@@ -66,9 +66,9 @@ public class MessagesDaoImpl implements MessagesDao {
                         .id(resultSet.getInt("id"))
                         .idVault(vaultId)
                         .contentCiphed(ContentCiphed.builder()
-                                .iv(resultSet.getBytes("iv"))
-                                .salt(resultSet.getBytes("salt"))
-                                .cipherText(resultSet.getBytes("cipherText"))
+                                .iv(resultSet.getString("iv"))
+                                .salt(resultSet.getString("salt"))
+                                .cipherText(resultSet.getString("cipherText"))
                                 .build())
                         .build();
                 messages.add(message);
@@ -89,9 +89,9 @@ public class MessagesDaoImpl implements MessagesDao {
              PreparedStatement preparedStatementInsertMessage = connection.prepareStatement(SQLQueries.INSERT_MESSAGE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatementInsertMessage.setInt(1, vaultId);
-            preparedStatementInsertMessage.setBytes(2, message.getContentCiphed().getIv());
-            preparedStatementInsertMessage.setBytes(3, message.getContentCiphed().getSalt());
-            preparedStatementInsertMessage.setBytes(4, message.getContentCiphed().getCipherText());
+            preparedStatementInsertMessage.setString(2, message.getContentCiphed().getIv());
+            preparedStatementInsertMessage.setString(3, message.getContentCiphed().getSalt());
+            preparedStatementInsertMessage.setString(4, message.getContentCiphed().getCipherText());
             preparedStatementInsertMessage.executeUpdate();
             ResultSet resultSetMessage = preparedStatementInsertMessage.getGeneratedKeys();
             if (resultSetMessage.next()) {
@@ -115,9 +115,9 @@ public class MessagesDaoImpl implements MessagesDao {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatementUpdateMessage = connection.prepareStatement(SQLQueries.UPDATE_MESSAGE_QUERY)) {
 
-            preparedStatementUpdateMessage.setBytes(1, message.getContentCiphed().getIv());
-            preparedStatementUpdateMessage.setBytes(2, message.getContentCiphed().getSalt());
-            preparedStatementUpdateMessage.setBytes(3, message.getContentCiphed().getCipherText());
+            preparedStatementUpdateMessage.setString(1, message.getContentCiphed().getIv());
+            preparedStatementUpdateMessage.setString(2, message.getContentCiphed().getSalt());
+            preparedStatementUpdateMessage.setString(3, message.getContentCiphed().getCipherText());
             preparedStatementUpdateMessage.setInt(4, messageId);
             if (preparedStatementUpdateMessage.executeUpdate() == 1) {
                 return Message.builder()

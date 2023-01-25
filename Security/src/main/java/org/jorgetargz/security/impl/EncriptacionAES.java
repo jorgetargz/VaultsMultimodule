@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Base64;
 
 @Log4j2
 public class EncriptacionAES implements Encriptacion {
@@ -44,9 +45,10 @@ public class EncriptacionAES implements Encriptacion {
             byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8));
 
             ContentCiphed contentCiphed = new ContentCiphed();
-            contentCiphed.setIv(iv);
-            contentCiphed.setSalt(salt);
-            contentCiphed.setCipherText(cipherText);
+            contentCiphed.setIv(Base64.getEncoder().encodeToString(iv));
+            contentCiphed.setSalt(Base64.getEncoder().encodeToString(salt));
+            contentCiphed.setCipherText(Base64.getEncoder().encodeToString(cipherText));
+
             return contentCiphed;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -57,16 +59,15 @@ public class EncriptacionAES implements Encriptacion {
     @Override
     public String desencriptar(ContentCiphed contentCiphed, String secret) {
         try {
-            byte[] iv = contentCiphed.getIv();
-            byte[] salt = contentCiphed.getSalt();
+            byte[] iv = Base64.getDecoder().decode(contentCiphed.getIv());
+            byte[] salt = Base64.getDecoder().decode(contentCiphed.getSalt());
+            byte[] cipherText = Base64.getDecoder().decode(contentCiphed.getCipherText());
 
             GCMParameterSpec parameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
-
             SecretKeySpec secretKey = getSecretKeySpec(secret, salt);
-
             Cipher cipher = Cipher.getInstance(AES_GCM_NO_PADDING);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
-            return new String(cipher.doFinal(contentCiphed.getCipherText()), StandardCharsets.UTF_8);
+            return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -79,5 +80,4 @@ public class EncriptacionAES implements Encriptacion {
         SecretKey tmp = factory.generateSecret(spec);
         return new SecretKeySpec(tmp.getEncoded(), AES);
     }
-
 }

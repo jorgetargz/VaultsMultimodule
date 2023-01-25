@@ -9,6 +9,7 @@ import org.jorgetargz.server.domain.services.ServicesVaults;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import org.jorgetargz.utils.modelo.*;
 
+import java.util.Base64;
 import java.util.List;
 
 public class ServicesVaultsImpl implements ServicesVaults {
@@ -40,6 +41,7 @@ public class ServicesVaultsImpl implements ServicesVaults {
 
     @Override
     public void changePassword(Vault credentials, String password, String usernameReader) {
+        String newPssword = new String(Base64.getDecoder().decode(password));
         int vaultId = credentials.getId();
         Vault vault = vaultsDao.getVault(vaultId);
         if (passwordHash.verify(credentials.getPassword().toCharArray(), vault.getPassword())
@@ -51,8 +53,8 @@ public class ServicesVaultsImpl implements ServicesVaults {
                 message.setContentCiphed(contentCiphed);
                 messageDao.updateMessage(message.getId(), message);
             }
-            password = passwordHash.generate(password.toCharArray());
-            vaultsDao.changePassword(vaultId, password);
+            newPssword = passwordHash.generate(newPssword.toCharArray());
+            vaultsDao.changePassword(vaultId, newPssword);
         } else {
             throw new ValidationException("Wrong password");
         }

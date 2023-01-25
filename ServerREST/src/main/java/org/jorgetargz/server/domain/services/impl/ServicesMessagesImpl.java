@@ -9,6 +9,7 @@ import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import org.jorgetargz.utils.modelo.Message;
 import org.jorgetargz.utils.modelo.Vault;
 
+import java.util.Base64;
 import java.util.List;
 
 public class ServicesMessagesImpl implements ServicesMessages {
@@ -16,20 +17,25 @@ public class ServicesMessagesImpl implements ServicesMessages {
     private final MessagesDao messageDao;
     private final VaultsDao vaultsDao;
     private final Pbkdf2PasswordHash passwordHash;
+    private final Base64.Decoder decoder;
 
     @Inject
     public ServicesMessagesImpl(MessagesDao messageDao, VaultsDao vaultsDao, Pbkdf2PasswordHash passwordHash) {
         this.messageDao = messageDao;
         this.vaultsDao = vaultsDao;
         this.passwordHash = passwordHash;
+        this.decoder = Base64.getDecoder();
     }
 
     @Override
     public List<Message> getMessages(Vault credentials, String usernameReader) {
         Vault vault = vaultsDao.getVault(credentials.getId());
-        if (vault.getName().equals(credentials.getName())
-                && vault.getUsernameOwner().equals(credentials.getUsernameOwner())
-                && passwordHash.verify(credentials.getPassword().toCharArray(), vault.getPassword())) {
+        String password = new String(decoder.decode(credentials.getPassword()));
+        String username = new String(decoder.decode(credentials.getUsernameOwner()));
+        String name = new String(decoder.decode(credentials.getName()));
+        if (vault.getName().equals(name)
+                && vault.getUsernameOwner().equals(username)
+                && passwordHash.verify(password.toCharArray(), vault.getPassword())) {
             if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
                 return messageDao.getMessages(credentials.getId());
             } else {
@@ -44,12 +50,14 @@ public class ServicesMessagesImpl implements ServicesMessages {
     public Message createMessage(Message message, String password, String usernameReader) {
         int vaultId = message.getIdVault();
         Vault vault = vaultsDao.getVault(vaultId);
+        password = new String(decoder.decode(password));
         checkPermsionToWrite(vault, password, usernameReader);
         return messageDao.createMessage(vaultId, message);
     }
 
     @Override
     public Message updateMessage(Message message, String password, String usernameReader) {
+        password = new String(decoder.decode(password));
         checkPermsionToWrite(vaultsDao.getVault(message.getIdVault()), password, usernameReader);
         return messageDao.updateMessage(message.getId(), message);
     }
