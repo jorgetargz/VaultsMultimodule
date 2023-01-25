@@ -28,17 +28,18 @@ public class RESTUsers {
 
     @POST
     @RolesAllowed(ConstantesAPI.ROLE_ADMIN)
-    public Response register(User user) {
+    public Response create(User user) {
         return Response.status(Response.Status.CREATED)
                 .entity(servicesUsers.scSave(user))
                 .build();
     }
 
     @DELETE
+    @Path(ConstantesAPI.USERNAME_PATH_PARAM)
     @RolesAllowed(ConstantesAPI.ROLE_ADMIN)
-    public Response delete(User user) {
-        servicesUsers.scDelete(user.getUsername());
-        return Response.status(Response.Status.NO_CONTENT).build();
+    public Response delete(@PathParam(ConstantesAPI.USERNAME_PARAM) String username) {
+        servicesUsers.scDelete(username);
+        return Response.noContent().build();
     }
 
 }

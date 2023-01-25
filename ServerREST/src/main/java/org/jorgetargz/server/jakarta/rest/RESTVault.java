@@ -50,7 +50,8 @@ public class RESTVault {
     }
 
     @DELETE
-    @RolesAllowed(ConstantesAPI.ROLE_USER + ConstantesAPI.VAULT_ID_PATH_PARAM)
+    @RolesAllowed(ConstantesAPI.ROLE_USER)
+    @Path(ConstantesAPI.VAULT_ID_PATH_PARAM)
     public Response deleteVault(@PathParam(ConstantesAPI.VAULT_ID_PARAM) int vaultId) {
         servicesVaults.deleteVault(vaultId, securityContext.getUserPrincipal().getName());
         return Response.noContent().build();

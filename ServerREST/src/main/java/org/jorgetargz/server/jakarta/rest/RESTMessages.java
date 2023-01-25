@@ -55,7 +55,7 @@ public class RESTMessages {
     }
 
     @DELETE
-    @Path(ConstantesAPI.MESSAGE_DELETE_PATH + ConstantesAPI.MESSAGE_ID_PATH_PARAM)
+    @Path(ConstantesAPI.MESSAGE_ID_PATH_PARAM)
     @RolesAllowed(ConstantesAPI.ROLE_USER)
     public Response deleteMessage(@PathParam(ConstantesAPI.MESSAGE_ID_PARAM) int messageId) {
         servicesMessages.deleteMessage(messageId, securityContext.getUserPrincipal().getName());
