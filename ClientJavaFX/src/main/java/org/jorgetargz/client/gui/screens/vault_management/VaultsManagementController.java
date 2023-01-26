@@ -53,6 +53,11 @@ public class VaultsManagementController extends BaseScreenController {
 
     public void initialize() {
         vaultsManagementViewModel.loadVaults();
+        writeByAll.onActionProperty().set(event -> {
+            if (writeByAll.isSelected()) {
+                readByAll.setSelected(true);
+            }
+        });
         vaultsManagementViewModel.getState().addListener((observableValue, oldState, newState) -> {
             if (newState.error() != null) {
                 Platform.runLater(() -> {
