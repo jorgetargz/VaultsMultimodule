@@ -34,9 +34,9 @@ public class VaultsManagementViewModel {
                             state.set(new VaultsManagementState(either.getLeft(), null, null, false, false, true));
                         else {
                             state.set(new VaultsManagementState(null, null, null, true, false, true));
+                            loadVaults();
                         }
                     });
-            loadVaults();
         } else {
             state.set(new VaultsManagementState(ScreenConstants.FILL_ALL_THE_INPUTS, null, null, false, false, true));
         }
@@ -134,9 +134,9 @@ public class VaultsManagementViewModel {
                             state.set(new VaultsManagementState(either.getLeft(), null, null, false, false, true));
                         else {
                             state.set(new VaultsManagementState(null, null, null, true, false, true));
+                            loadVaults();
                         }
                     });
-            loadVaults();
         } else {
             state.set(new VaultsManagementState(ScreenConstants.FILL_ALL_THE_INPUTS, null, null, false, false, true));
         }
