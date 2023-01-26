@@ -18,6 +18,7 @@ import org.jorgetargz.utils.modelo.Vault;
 public class VaultsManagementController extends BaseScreenController {
 
     private final VaultsManagementViewModel vaultsManagementViewModel;
+
     @FXML
     private MFXToggleButton readByAll;
     @FXML
@@ -71,7 +72,7 @@ public class VaultsManagementController extends BaseScreenController {
             }
             if (newState.operationDone()) {
                 Platform.runLater(() -> {
-                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, "Operation done");
+                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, ScreenConstants.OPERATION_DONE);
                     vaultsManagementViewModel.clenState();
                 });
             }

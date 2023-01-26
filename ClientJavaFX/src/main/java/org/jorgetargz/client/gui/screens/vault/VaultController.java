@@ -40,8 +40,8 @@ public class VaultController extends BaseScreenController {
 
     public void initialize() {
 
-        columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        columnContent.setCellValueFactory(new PropertyValueFactory<>("contentUnsecured"));
+        columnId.setCellValueFactory(new PropertyValueFactory<>(ScreenConstants.ID));
+        columnContent.setCellValueFactory(new PropertyValueFactory<>(ScreenConstants.CONTENT_UNSECURED));
         vaultsViewModel.getState().addListener((observableValue, oldState, newState) -> {
             if (newState.error() != null) {
                 Platform.runLater(() -> {
@@ -57,7 +57,7 @@ public class VaultController extends BaseScreenController {
             }
             if (newState.operationDone()) {
                 Platform.runLater(() -> {
-                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, "Operation done");
+                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, ScreenConstants.OPERATION_DONE);
                     vaultsViewModel.clenState();
                 });
             }

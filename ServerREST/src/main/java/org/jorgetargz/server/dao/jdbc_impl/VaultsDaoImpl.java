@@ -35,7 +35,7 @@ public class VaultsDaoImpl implements VaultsDao {
                 vaults.add(getVault(resultSet));
             }
             if (vaults.isEmpty()) {
-                throw new NotFoundException("No vaults found");
+                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -53,7 +53,7 @@ public class VaultsDaoImpl implements VaultsDao {
             if (resultSet.next()) {
                 return getVault(resultSet);
             } else {
-                throw new NotFoundException("Vault not found");
+                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
             }
 
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class VaultsDaoImpl implements VaultsDao {
             if (resultSet.next()) {
                 return getVault(resultSet);
             } else {
-                throw new NotFoundException("Vault not found");
+                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -121,7 +121,7 @@ public class VaultsDaoImpl implements VaultsDao {
             preparedStatement.setString(1, newPassword);
             preparedStatement.setInt(2, vaultId);
             if (preparedStatement.executeUpdate() != 1) {
-                throw new NotFoundException("Vault not found");
+                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -142,7 +142,7 @@ public class VaultsDaoImpl implements VaultsDao {
                 if (preparedStatement.executeUpdate() == 1) {
                     connection.commit();
                 } else {
-                    throw new NotFoundException("Vault not found");
+                    throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
                 }
             }
         } catch (SQLException e) {

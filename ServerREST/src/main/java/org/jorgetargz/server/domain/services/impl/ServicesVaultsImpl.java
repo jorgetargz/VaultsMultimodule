@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.security.Encriptacion;
 import org.jorgetargz.server.dao.MessagesDao;
 import org.jorgetargz.server.dao.VaultsDao;
+import org.jorgetargz.server.domain.common.Constantes;
 import org.jorgetargz.server.domain.services.ServicesVaults;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import org.jorgetargz.utils.modelo.ContentCiphed;
@@ -54,10 +55,10 @@ public class ServicesVaultsImpl implements ServicesVaults {
             if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
                 return vault;
             } else {
-                throw new ValidationException("You do not have permission to read this vault");
+                throw new ValidationException(Constantes.ONLY_THE_OWNER_CAN_READ_THIS_VAULT);
             }
         } else {
-            throw new ValidationException("Wrong credentials");
+            throw new ValidationException(Constantes.WRONG_CREDENTIALS);
         }
     }
 
@@ -80,7 +81,7 @@ public class ServicesVaultsImpl implements ServicesVaults {
             String newPasswordHashed = passwordHash.generate(newPassword.toCharArray());
             vaultsDao.changePassword(vaultId, newPasswordHashed);
         } else {
-            throw new ValidationException("You are not the owner of this vault or the password is incorrect");
+            throw new ValidationException(Constantes.NOT_THE_OWNER_OF_THIS_VAULT_OR_THE_PASSWORD_IS_INCORRECT);
         }
     }
 
@@ -90,7 +91,7 @@ public class ServicesVaultsImpl implements ServicesVaults {
         if (vault.getUsernameOwner().equals(usernameReader)) {
             vaultsDao.deleteVault(vaultId);
         } else {
-            throw new ValidationException("You are not the owner of this vault");
+            throw new ValidationException(Constantes.ONLY_THE_OWNER_OF_THE_VAULT_CAN_DELETE_IT);
         }
     }
 }

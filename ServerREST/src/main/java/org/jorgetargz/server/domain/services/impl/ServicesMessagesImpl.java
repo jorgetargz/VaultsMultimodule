@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import org.jorgetargz.server.dao.MessagesDao;
 import org.jorgetargz.server.dao.VaultsDao;
+import org.jorgetargz.server.domain.common.Constantes;
 import org.jorgetargz.server.domain.services.ServicesMessages;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import org.jorgetargz.utils.modelo.Message;
@@ -37,10 +38,10 @@ public class ServicesMessagesImpl implements ServicesMessages {
             if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
                 return messageDao.getMessages(vault.getId());
             } else {
-                throw new ValidationException("You don't have permission to read this vault");
+                throw new ValidationException(Constantes.YOU_DON_T_HAVE_PERMISSION_TO_READ_THIS_VAULT);
             }
         } else {
-            throw new ValidationException("Wrong credentials");
+            throw new ValidationException(Constantes.WRONG_CREDENTIALS);
         }
     }
 
@@ -63,10 +64,10 @@ public class ServicesMessagesImpl implements ServicesMessages {
     private void checkPermsionToWrite(Vault vault, String password, String usernameReader) {
         if (passwordHash.verify(password.toCharArray(), vault.getPassword())) {
             if (!vault.getUsernameOwner().equals(usernameReader) && !vault.isWriteByAll()) {
-                throw new ValidationException("Only the owner of the vault can write in it");
+                throw new ValidationException(Constantes.ONLY_THE_OWNER_OF_THE_VAULT_CAN_WRITE_IN_IT);
             }
         } else {
-            throw new ValidationException("Wrong password");
+            throw new ValidationException(Constantes.WRONG_CREDENTIALS);
         }
     }
 
@@ -76,7 +77,7 @@ public class ServicesMessagesImpl implements ServicesMessages {
         if (vault.getUsernameOwner().equals(usernameReader)) {
             messageDao.deleteMessage(messageId);
         } else {
-            throw new ValidationException("You don't have permission to write in this vault");
+            throw new ValidationException(Constantes.ONLY_THE_OWNER_OF_THE_VAULT_CAN_DELETE_MESSAGES);
         }
     }
 }

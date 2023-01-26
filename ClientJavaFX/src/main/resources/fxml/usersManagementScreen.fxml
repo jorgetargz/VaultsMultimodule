@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="650.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.jorgetargz.client.gui.screens.users_management.UsersManagementController">
-    <Label fx:id="title" layoutX="64.0" layoutY="120.0" styleClass="title" text="%Title" textFill="#d978c6"/>
     <MFXTextField fx:id="txtUsernameRegister" floatMode="BORDER" layoutX="100.0" layoutY="249.0" prefHeight="2.0"
                   prefWidth="290.0" promptText="%Username"/>
     <MFXPasswordField fx:id="txtPasswordRegister" layoutX="413.0" layoutY="243.0" prefHeight="53.0" prefWidth="270.0"

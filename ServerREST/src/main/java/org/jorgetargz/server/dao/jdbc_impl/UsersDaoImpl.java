@@ -86,9 +86,9 @@ public class UsersDaoImpl implements UsersDao {
 
     private User getLoginFromResultSet(ResultSet resultSet) throws SQLException {
         return User.builder()
-                .username(resultSet.getString("username"))
-                .password(resultSet.getString("password"))
-                .role(resultSet.getString("role"))
+                .username(resultSet.getString(Constantes.USERNAME))
+                .password(resultSet.getString(Constantes.PASSWORD))
+                .role(resultSet.getString(Constantes.ROLE))
                 .build();
     }
 

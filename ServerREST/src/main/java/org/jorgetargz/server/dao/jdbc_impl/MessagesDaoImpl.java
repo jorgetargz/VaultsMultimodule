@@ -34,15 +34,15 @@ public class MessagesDaoImpl implements MessagesDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Vault.builder()
-                        .id(resultSet.getInt("id"))
-                        .name(resultSet.getString("name"))
-                        .usernameOwner(resultSet.getString("username"))
-                        .password(resultSet.getString("password"))
+                        .id(resultSet.getInt(Constantes.ID))
+                        .name(resultSet.getString(Constantes.NAME))
+                        .usernameOwner(resultSet.getString(Constantes.USERNAME))
+                        .password(resultSet.getString(Constantes.PASSWORD))
                         .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
                         .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
                         .build();
             } else {
-                throw new NotFoundException("Vault not found");
+                throw new NotFoundException(Constantes.VAULT_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -59,12 +59,12 @@ public class MessagesDaoImpl implements MessagesDao {
             List<Message> messages = new ArrayList<>();
             while (resultSet.next()) {
                 Message message = Message.builder()
-                        .id(resultSet.getInt("id"))
+                        .id(resultSet.getInt(Constantes.ID))
                         .idVault(vaultId)
                         .contentCiphed(ContentCiphed.builder()
-                                .iv(resultSet.getString("iv"))
-                                .salt(resultSet.getString("salt"))
-                                .cipherText(resultSet.getString("cipherText"))
+                                .iv(resultSet.getString(Constantes.IV))
+                                .salt(resultSet.getString(Constantes.SALT))
+                                .cipherText(resultSet.getString(Constantes.CIPHER_TEXT))
                                 .build())
                         .build();
                 messages.add(message);
@@ -118,7 +118,7 @@ public class MessagesDaoImpl implements MessagesDao {
                         .contentCiphed(message.getContentCiphed())
                         .build();
             } else {
-                throw new NotFoundException("Message not found");
+                throw new NotFoundException(Constantes.MESSAGE_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -133,7 +133,7 @@ public class MessagesDaoImpl implements MessagesDao {
 
             preparedStatementDeleteMessage.setInt(1, messageId);
             if (preparedStatementDeleteMessage.executeUpdate() != 1) {
-                throw new NotFoundException("Message not found");
+                throw new NotFoundException(Constantes.MESSAGE_NOT_FOUND);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());

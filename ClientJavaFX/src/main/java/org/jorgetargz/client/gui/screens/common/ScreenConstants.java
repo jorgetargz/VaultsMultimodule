@@ -32,6 +32,9 @@ public class ScreenConstants {
 
     public static final String LOGOUT_SUCCESS = "Logout success";
     public static final String SUCCESS = "Success";
+    public static final String ID = "id";
+    public static final String CONTENT_UNSECURED = "contentUnsecured";
+    public static final String OPERATION_DONE = "Operation done";
 
 
     private ScreenConstants() {

@@ -17,8 +17,6 @@ public class UsersManagementController extends BaseScreenController {
 
     private final UsersManagementViewModel usersManagementViewModel;
     @FXML
-    private Label title;
-    @FXML
     private MFXTextField txtUsernameRegister;
     @FXML
     private MFXPasswordField txtPasswordRegister;
@@ -31,7 +29,6 @@ public class UsersManagementController extends BaseScreenController {
     }
 
     public void initialize() {
-        title.setText("Users Management");
         usersManagementViewModel.getState().addListener((observableValue, oldState, newState) -> {
             if (newState.error() != null) {
                 Platform.runLater(() -> {
@@ -41,7 +38,7 @@ public class UsersManagementController extends BaseScreenController {
             }
             if (newState.operationDone()) {
                 Platform.runLater(() -> {
-                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, "Operation done");
+                    this.getPrincipalController().showAlert(Alert.AlertType.INFORMATION, ScreenConstants.SUCCESS, ScreenConstants.OPERATION_DONE);
                     usersManagementViewModel.clenState();
                 });
             }

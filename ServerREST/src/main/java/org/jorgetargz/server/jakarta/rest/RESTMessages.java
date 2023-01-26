@@ -31,7 +31,7 @@ public class RESTMessages {
 
     @GET
     @RolesAllowed(ConstantesAPI.ROLE_USER)
-    public List<Message> getMessages(@QueryParam("vaultName") String vaultName, @QueryParam("usernameOwner") String usernameOwner, @QueryParam("password") String password) {
+    public List<Message> getMessages(@QueryParam(ConstantesAPI.VAULT_NAME) String vaultName, @QueryParam(ConstantesAPI.USERNAME_OWNER) String usernameOwner, @QueryParam(ConstantesAPI.PASSWORD) String password) {
         Vault credentials = Vault.builder()
                 .name(vaultName)
                 .usernameOwner(usernameOwner)
@@ -42,13 +42,13 @@ public class RESTMessages {
 
     @POST
     @RolesAllowed(ConstantesAPI.ROLE_USER)
-    public Message createMessage(Message message, @QueryParam("password") String password) {
+    public Message createMessage(Message message, @QueryParam(ConstantesAPI.PASSWORD) String password) {
         return servicesMessages.createMessage(message, password, securityContext.getUserPrincipal().getName());
     }
 
     @PUT
     @RolesAllowed(ConstantesAPI.ROLE_USER)
-    public Message updateMessage(Message message, @QueryParam("password") String password) {
+    public Message updateMessage(Message message, @QueryParam(ConstantesAPI.PASSWORD) String password) {
         return servicesMessages.updateMessage(message, password, securityContext.getUserPrincipal().getName());
     }
 

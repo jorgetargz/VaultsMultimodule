@@ -19,7 +19,6 @@ import java.util.Objects;
 @Log4j2
 public class GenericDAO {
 
-    public static final String APPLICATION_JSON = "application/json";
     private final Gson gson;
 
     @Inject
@@ -40,7 +39,7 @@ public class GenericDAO {
                     } else {
                         Either<String, Boolean> result;
                         ResponseBody responseBody = Objects.requireNonNull(objectResponse.errorBody());
-                        if (Objects.equals(responseBody.contentType(), MediaType.get(APPLICATION_JSON))) {
+                        if (Objects.equals(responseBody.contentType(), MediaType.get(Constantes.APPLICATION_JSON))) {
                             BaseError apierror = gson.fromJson(responseBody.string(), BaseError.class);
                             result = Either.left(apierror.getMessage());
                         } else {
@@ -62,7 +61,7 @@ public class GenericDAO {
         if (throwable instanceof HttpException httpException) {
             try (ResponseBody responseBody = Objects.requireNonNull(httpException.response()).errorBody()) {
                 if (Objects.equals(Objects.requireNonNull(responseBody).contentType(),
-                        MediaType.get(APPLICATION_JSON))) {
+                        MediaType.get(Constantes.APPLICATION_JSON))) {
                     BaseError apierror = gson.fromJson(responseBody.string(), BaseError.class);
                     error = Either.left(apierror.getMessage());
                 } else {

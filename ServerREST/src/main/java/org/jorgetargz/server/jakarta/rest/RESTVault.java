@@ -38,7 +38,7 @@ public class RESTVault {
     @GET
     @RolesAllowed(ConstantesAPI.ROLE_USER)
     @Path(ConstantesAPI.VAULT_PATH)
-    public Vault getVault(@QueryParam("vaultName") String vaultName, @QueryParam("usernameOwner") String usernameOwner, @QueryParam("password") String password) {
+    public Vault getVault(@QueryParam(ConstantesAPI.VAULT_NAME) String vaultName, @QueryParam(ConstantesAPI.USERNAME_OWNER) String usernameOwner, @QueryParam(ConstantesAPI.PASSWORD) String password) {
         Vault credentials = Vault.builder()
                 .name(vaultName)
                 .usernameOwner(usernameOwner)
@@ -56,7 +56,7 @@ public class RESTVault {
     @POST
     @RolesAllowed(ConstantesAPI.ROLE_USER)
     @Path(ConstantesAPI.VAULT_CHANGE_PASSWORD_PATH)
-    public Response changePassword(Vault credentials, @QueryParam("password") String password) {
+    public Response changePassword(Vault credentials, @QueryParam(ConstantesAPI.PASSWORD) String password) {
         servicesVaults.changePassword(credentials, password, securityContext.getUserPrincipal().getName());
         return Response.ok().build();
     }

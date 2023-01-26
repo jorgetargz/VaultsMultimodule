@@ -23,6 +23,11 @@ public class ConstantesAPI {
     public static final String USERNAME_PATH_PARAM = "{username}";
     public static final String USERNAME_PARAM = "username";
 
+    //Query Parameters
+    public static final String VAULT_NAME = "vaultName";
+    public static final String USERNAME_OWNER = "usernameOwner";
+    public static final String PASSWORD = "password";
+
     //ENDPOINTS LOGIN
     public static final String ENDPOINT_LOGIN = PATH_LOGIN;
     public static final String ENDPOINT_LOGOUT = PATH_LOGIN + LOGOUT_PATH;
