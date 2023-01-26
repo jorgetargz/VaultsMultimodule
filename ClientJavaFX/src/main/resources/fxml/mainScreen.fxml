@@ -32,10 +32,7 @@
                     <MenuItem fx:id="menuItemUsersManagement" mnemonicParsing="false" onAction="#menuOnClick" text="%UsersManagement"/>
                 </Menu>
                 <Menu fx:id="menuVaults" mnemonicParsing="false" text="%Vaults">
-                    <MenuItem fx:id="menuItemVaultOpen" mnemonicParsing="false" onAction="#menuOnClick" text="%OpenVault"/>
-                    <MenuItem fx:id="menuItemVaultCreate" mnemonicParsing="false" onAction="#menuOnClick" text="%CreateVault"/>
-                    <MenuItem fx:id="menuItemVaultDelete" mnemonicParsing="false" onAction="#menuOnClick" text="%DeleteVault"/>
-                    <MenuItem fx:id="menuItemVaultPasswordChange" mnemonicParsing="false" onAction="#menuOnClick" text="%ChangePasswordVault"/>
+                    <MenuItem fx:id="menuItemVaultsManagement" mnemonicParsing="false" onAction="#menuOnClick" text="%VaultsManagement"/>
                 </Menu>
             </MenuBar>
             <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-lock" size="21.0" styleClass="always-on-top-icon"/>

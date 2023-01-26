@@ -29,6 +29,7 @@ public class ConstantesAPI {
 
     //ENDPOINTS VAULT
     public static final String ENDPOINT_VAULT = PATH_VAULTS;
+    public static final String ENDPOINT_VAULT_GET = PATH_VAULTS + VAULT_PATH;
     public static final String ENDPOINT_VAULT_CHANGE_PASSWORD = PATH_VAULTS + VAULT_CHANGE_PASSWORD_PATH;
     public static final String ENDPOINT_VAULT_DELETE = PATH_VAULTS + VAULT_ID_PATH_PARAM;
 

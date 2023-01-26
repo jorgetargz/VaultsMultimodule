@@ -35,6 +35,18 @@ public class RESTVault {
         return servicesVaults.getVaults(securityContext.getUserPrincipal().getName());
     }
 
+    @GET
+    @RolesAllowed(ConstantesAPI.ROLE_USER)
+    @Path(ConstantesAPI.VAULT_PATH)
+    public Vault getVault(@QueryParam("vaultName") String vaultName, @QueryParam("usernameOwner") String usernameOwner, @QueryParam("password") String password) {
+        Vault credentials = Vault.builder()
+                .name(vaultName)
+                .usernameOwner(usernameOwner)
+                .password(password)
+                .build();
+        return servicesVaults.getVault(credentials, securityContext.getUserPrincipal().getName());
+    }
+
     @POST
     @RolesAllowed(ConstantesAPI.ROLE_USER)
     public Vault createVault(Vault vault) {

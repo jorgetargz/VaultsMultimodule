@@ -26,6 +26,11 @@ public class VaultsDAOImpl extends GenericDAO implements VaultDAO {
     }
 
     @Override
+    public Single<Either<String, Vault>> get(String vaultName, String username, String password) {
+        return safeAPICall(vaultAPI.getVault(vaultName, username, password));
+    }
+
+    @Override
     public Single<Either<String, Vault>> save(Vault vault) {
         return safeAPICall(vaultAPI.createVault(vault));
     }

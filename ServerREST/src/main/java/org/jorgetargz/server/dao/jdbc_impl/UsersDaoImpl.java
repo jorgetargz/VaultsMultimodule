@@ -61,18 +61,22 @@ public class UsersDaoImpl implements UsersDao {
     public void delete(String username) {
         try (Connection connection = dbConnection.getConnection()) {
              connection.setAutoCommit(false);
+             // Delete all messages from the user
              try (PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_MESSAGES_QUERY_BY_USERNAME)){
                  preparedStatement.setString(1, username);
                  preparedStatement.executeUpdate();
              }
+             // Delete all vaults from the user
              try (PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_VAULTS_QUERY_BY_USERNAME)){
                  preparedStatement.setString(1, username);
                  preparedStatement.executeUpdate();
              }
+             // Delete the user
              try (PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_LOGIN_QUERY)){
                  preparedStatement.setString(1, username);
                  preparedStatement.executeUpdate();
              }
+             // Commit the transaction
              connection.commit();
         } catch (SQLException e) {
             log.error(e.getMessage());

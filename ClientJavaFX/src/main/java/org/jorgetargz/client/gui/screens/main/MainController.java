@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.utils.common.ConstantesAPI;
 import org.jorgetargz.utils.modelo.User;
+import org.jorgetargz.utils.modelo.Vault;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -55,6 +56,7 @@ public class MainController {
     private Menu menuVaults;
 
     private User user;
+    private Vault vault;
 
     private final MainViewModel mainViewModel;
 
@@ -67,6 +69,10 @@ public class MainController {
 
     public User getUser() {
         return user;
+    }
+
+    public Vault getVault() {
+        return vault;
     }
 
     public BorderPane getRootPane() {
@@ -162,9 +168,9 @@ public class MainController {
     @FXML
     private void menuOnClick(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
-            case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
             case ScreenConstants.MENU_ITEM_PANTALLA_USERS_MANAGEMENT -> cargarPantalla(Screens.USER_MANAGEMENT);
-            default -> cargarPantalla(Screens.LOGIN);
+            case ScreenConstants.MENU_ITEM_PANTALLA_VAULTS_MANAGEMENT -> cargarPantalla(Screens.VAULT_MANAGEMENT);
+            default -> cargarPantalla(Screens.WELCOME);
         }
     }
 
@@ -207,6 +213,11 @@ public class MainController {
     public void onLoginDone() {
         menuPrincipal.setVisible(true);
         cargarPantalla(Screens.WELCOME);
+    }
+
+    public void onVaultOpened(Vault vault) {
+        this.vault = vault;
+        //cargarPantalla(Screens.VAULT);
     }
 
     public void login() {

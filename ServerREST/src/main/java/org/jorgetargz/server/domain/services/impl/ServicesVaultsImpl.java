@@ -6,10 +6,11 @@ import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.security.Encriptacion;
 import org.jorgetargz.server.dao.MessagesDao;
 import org.jorgetargz.server.dao.VaultsDao;
-import org.jorgetargz.server.dao.excepciones.NotFoundException;
 import org.jorgetargz.server.domain.services.ServicesVaults;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
-import org.jorgetargz.utils.modelo.*;
+import org.jorgetargz.utils.modelo.ContentCiphed;
+import org.jorgetargz.utils.modelo.Message;
+import org.jorgetargz.utils.modelo.Vault;
 
 import java.util.Base64;
 import java.util.List;
@@ -21,6 +22,7 @@ public class ServicesVaultsImpl implements ServicesVaults {
     private final MessagesDao messageDao;
     private final Pbkdf2PasswordHash passwordHash;
     private final Encriptacion encriptacion;
+    private final Base64.Decoder decoder;
 
     @Inject
     public ServicesVaultsImpl(VaultsDao vaultsDao, MessagesDao messageDao, Pbkdf2PasswordHash passwordHash, Encriptacion encriptacion) {
@@ -28,6 +30,7 @@ public class ServicesVaultsImpl implements ServicesVaults {
         this.messageDao = messageDao;
         this.passwordHash = passwordHash;
         this.encriptacion = encriptacion;
+        this.decoder = Base64.getDecoder();
     }
 
 
@@ -43,27 +46,42 @@ public class ServicesVaultsImpl implements ServicesVaults {
     }
 
     @Override
+    public Vault getVault(Vault credentials, String usernameReader) {
+        String password = new String(decoder.decode(credentials.getPassword()));
+        String username = new String(decoder.decode(credentials.getUsernameOwner()));
+        String name = new String(decoder.decode(credentials.getName()));
+        Vault vault = vaultsDao.getVault(username, name);
+        if (passwordHash.verify(password.toCharArray(), vault.getPassword())) {
+            if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
+                return vault;
+            } else {
+                throw new ValidationException("You do not have permission to read this vault");
+            }
+        } else {
+            throw new ValidationException("Wrong credentials");
+        }
+    }
+
+    @Override
     public void changePassword(Vault credentials, String password, String usernameReader) {
-        String newPssword = new String(Base64.getDecoder().decode(password));
+        String newPassword = new String(Base64.getDecoder().decode(password));
         int vaultId = credentials.getId();
         Vault vault = vaultsDao.getVault(vaultId);
         if (passwordHash.verify(credentials.getPassword().toCharArray(), vault.getPassword())
                 && vault.getUsernameOwner().equals(usernameReader)) {
-            try {
-                List<Message> messages = messageDao.getMessages(vaultId);
-                for (Message message : messages) {
-                    String messageText = encriptacion.desencriptar(message.getContentCiphed(), credentials.getPassword());
-                    ContentCiphed contentCiphed = encriptacion.encriptar(messageText, newPssword);
-                    message.setContentCiphed(contentCiphed);
-                    messageDao.updateMessage(message);
-                }
-            } catch (NotFoundException e) {
-                log.info("No messages found for vault while changing vault password");
+
+            List<Message> messages = messageDao.getMessages(vaultId);
+            for (Message message : messages) {
+                String messageText = encriptacion.desencriptar(message.getContentCiphed(), credentials.getPassword());
+                ContentCiphed contentCiphed = encriptacion.encriptar(messageText, newPassword);
+                message.setContentCiphed(contentCiphed);
+                messageDao.updateMessage(message);
             }
-            newPssword = passwordHash.generate(newPssword.toCharArray());
-            vaultsDao.changePassword(vaultId, newPssword);
+
+            String newPasswordHashed = passwordHash.generate(newPassword.toCharArray());
+            vaultsDao.changePassword(vaultId, newPasswordHashed);
         } else {
-            throw new ValidationException("You are not the owner of this vault");
+            throw new ValidationException("You are not the owner of this vault or the password is incorrect");
         }
     }
 

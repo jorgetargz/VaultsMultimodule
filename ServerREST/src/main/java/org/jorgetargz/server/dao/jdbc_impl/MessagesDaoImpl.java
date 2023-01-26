@@ -38,8 +38,8 @@ public class MessagesDaoImpl implements MessagesDao {
                         .name(resultSet.getString("name"))
                         .usernameOwner(resultSet.getString("username"))
                         .password(resultSet.getString("password"))
-                        .readByAll(resultSet.getInt("read") == 1)
-                        .writeByAll(resultSet.getInt("write") == 1)
+                        .readByAll(resultSet.getBoolean(Constantes.READ_BY_ALL))
+                        .writeByAll(resultSet.getBoolean(Constantes.WRITE_BY_ALL))
                         .build();
             } else {
                 throw new NotFoundException("Vault not found");
@@ -68,10 +68,6 @@ public class MessagesDaoImpl implements MessagesDao {
                                 .build())
                         .build();
                 messages.add(message);
-            }
-            if (messages.isEmpty()){
-                log.warn(Constantes.MESSAGE_NOT_FOUND);
-                throw new NotFoundException(Constantes.MESSAGE_NOT_FOUND);
             }
             return messages;
         } catch (SQLException e) {

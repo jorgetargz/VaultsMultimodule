@@ -27,16 +27,14 @@ import org.jorgetargz.utils.modelo.User;
 import org.jorgetargz.utils.modelo.Vault;
 import retrofit2.Retrofit;
 
-import java.util.List;
-
 public class Test {
 
     public static void main(String[] args) {
         Encriptacion encriptacion = new EncriptacionAES();
         Gson gson = new ProducerGson().getGson();
         CacheAuthorization cacheAuthorization = new CacheAuthorization();
-        cacheAuthorization.setUser("ruben");
-        cacheAuthorization.setPassword("ruben");
+        cacheAuthorization.setUser("manolo");
+        cacheAuthorization.setPassword("manolo");
         AuthorizationInterceptor authorizationInterceptor = new AuthorizationInterceptor(cacheAuthorization);
         ConfigVaultAPI config = new ConfigVaultAPI();
         Retrofit retrofit = new ProducerVaultAPI().getRetrofit(config, authorizationInterceptor, gson);
@@ -60,7 +58,7 @@ public class Test {
         int id = 7;
         //performCall(messagesServices.delete(id));
 
-       performCall(messagesServices.getAll("Caja rebuena", "ruben", "manolo"));
+        //performCall(messagesServices.getAll("Caja rebuena", "ruben", "manolo"));
 
 
         UsersAPI usersAPI = new ProducerVaultAPI().getUsersAPI(retrofit);
@@ -83,9 +81,9 @@ public class Test {
         //performCall(vaultServices.getAll());
 
         Vault vault = Vault.builder()
-                .name("Caja rebuena")
-                .usernameOwner("ruben")
-                .password("ruben")
+                .name("Caja la buena")
+                .usernameOwner("manolo")
+                .password("manolo")
                 .writeByAll(true)
                 .readByAll(true)
                 .build();

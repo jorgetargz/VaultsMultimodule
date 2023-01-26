@@ -14,4 +14,9 @@ public class Vault {
     private String password;
     private boolean readByAll;
     private boolean writeByAll;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

@@ -8,6 +8,8 @@ public interface ServicesVaults {
 
     List<Vault> getVaults(String username);
 
+    Vault getVault(Vault credentials, String usernameReader);
+
     Vault createVault(Vault vault);
 
     void changePassword(Vault credentials, String password, String usernameReader);

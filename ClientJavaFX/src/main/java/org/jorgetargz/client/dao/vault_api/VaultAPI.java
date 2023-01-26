@@ -13,6 +13,11 @@ public interface VaultAPI {
     @GET(ConstantesAPI.ENDPOINT_VAULT)
     Single<List<Vault>> getVaults();
 
+    @GET(ConstantesAPI.ENDPOINT_VAULT_GET)
+    Single<Vault> getVault(@Query("vaultName") String vaultName,
+                           @Query("usernameOwner") String usernameOwner,
+                           @Query("password") String password);
+
     @POST(ConstantesAPI.ENDPOINT_VAULT)
     Single<Vault> createVault(@Body Vault vault);
 

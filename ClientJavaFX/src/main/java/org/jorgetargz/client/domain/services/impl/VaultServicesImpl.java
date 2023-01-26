@@ -25,6 +25,14 @@ public class VaultServicesImpl implements VaultServices {
     }
 
     @Override
+    public Single<Either<String, Vault>> get(String vaultName, String username, String password) {
+        vaultName = Base64.getEncoder().encodeToString(vaultName.getBytes());
+        username = Base64.getEncoder().encodeToString(username.getBytes());
+        password = Base64.getEncoder().encodeToString(password.getBytes());
+        return vaultDAO.get(vaultName, username, password);
+    }
+
+    @Override
     public Single<Either<String, Vault>> save(Vault vault) {
         return vaultDAO.save(vault);
     }

@@ -33,9 +33,7 @@ public class ServicesMessagesImpl implements ServicesMessages {
         String username = new String(decoder.decode(credentials.getUsernameOwner()));
         String name = new String(decoder.decode(credentials.getName()));
         Vault vault = vaultsDao.getVault(username, name);
-        if (vault.getName().equals(name)
-                && vault.getUsernameOwner().equals(username)
-                && passwordHash.verify(password.toCharArray(), vault.getPassword())) {
+        if (passwordHash.verify(password.toCharArray(), vault.getPassword())) {
             if (vault.getUsernameOwner().equals(usernameReader) || vault.isReadByAll()) {
                 return messageDao.getMessages(vault.getId());
             } else {
