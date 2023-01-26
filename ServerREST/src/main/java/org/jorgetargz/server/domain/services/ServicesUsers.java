@@ -13,7 +13,5 @@ public interface ServicesUsers {
 
     User scCheckCredentials(String username, char[] password) throws UnauthorizedException, ValidationException;
 
-    void scLogout(String authorization);
-
     void scDelete(String username);
 }

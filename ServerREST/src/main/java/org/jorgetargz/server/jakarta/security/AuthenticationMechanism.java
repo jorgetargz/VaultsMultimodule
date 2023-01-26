@@ -1,20 +1,23 @@
 package org.jorgetargz.server.jakarta.security;
 
-import org.jorgetargz.server.dao.excepciones.UnauthorizedException;
-import org.jorgetargz.server.jakarta.common.Constantes;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.security.enterprise.AuthenticationStatus;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import jakarta.security.enterprise.credential.BasicAuthenticationCredential;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
+import jakarta.security.enterprise.identitystore.IdentityStore;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import lombok.extern.log4j.Log4j2;
+import org.jorgetargz.server.dao.excepciones.UnauthorizedException;
+import org.jorgetargz.server.jakarta.common.Constantes;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwk.RsaJsonWebKey;
+import org.jose4j.jwk.RsaJwkGenerator;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
@@ -31,9 +34,14 @@ import java.util.Set;
 @ApplicationScoped
 public class AuthenticationMechanism implements HttpAuthenticationMechanism {
 
-    @Inject
-    private IdentityStoreImpl identity;
+    private final IdentityStore identity;
+    private final RsaJsonWebKey rsaJsonWebKey;
 
+    @Inject
+    public AuthenticationMechanism(@Named(Constantes.MY_IDENTITY_STORE) IdentityStore identity) {
+        this.identity = identity;
+        this.rsaJsonWebKey = getRsaJsonWebKey();
+    }
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest httpServletRequest,
@@ -65,9 +73,6 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
     }
 
     private String createJWT(CredentialValidationResult credentialValidationResult) {
-        RsaJsonWebKeyProducer rsaJsonWebKeyProducer = RsaJsonWebKeyProducer.getInstance();
-        RsaJsonWebKey rsaJsonWebKey = rsaJsonWebKeyProducer.getRSAKey();
-
         JwtClaims claims = new JwtClaims();
         claims.setIssuer(Constantes.NEWSPAPERS_API);
         claims.setAudience(Constantes.CLIENTS);
@@ -110,12 +115,6 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
 
     private CredentialValidationResult getCredentialFromJWT(String jwt) throws InvalidJwtException {
         CredentialValidationResult credentialValidationResult = null;
-        RsaJsonWebKeyProducer rsaJsonWebKeyProducer = RsaJsonWebKeyProducer.getInstance();
-        RsaJsonWebKey rsaJsonWebKey = rsaJsonWebKeyProducer.getRSAKey();
-
-        if (JWTBlackList.getInstance().isTokenInBlackList(jwt)) {
-            throw new UnauthorizedException(Constantes.TOKEN_IN_BLACK_LIST);
-        }
 
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
@@ -161,5 +160,16 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
         }
 
         return httpMessageContext.doNothing();
+    }
+
+    private RsaJsonWebKey getRsaJsonWebKey() {
+        RsaJsonWebKey rsaJsonWebKey1 = null;
+        try {
+            rsaJsonWebKey1 = RsaJwkGenerator.generateJwk(2048);
+            rsaJsonWebKey1.setKeyId(Constantes.KEY_ID);
+        } catch (JoseException e) {
+            log.error(e.getMessage(), e);
+        }
+        return rsaJsonWebKey1;
     }
 }

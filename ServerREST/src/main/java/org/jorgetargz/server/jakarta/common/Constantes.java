@@ -2,6 +2,8 @@ package org.jorgetargz.server.jakarta.common;
 
 public class Constantes {
 
+    public static final String MY_IDENTITY_STORE = "My_Identity_store";
+
     private Constantes() {
     }
 
