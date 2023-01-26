@@ -220,8 +220,4 @@ public class MainController {
         cargarPantalla(Screens.VAULT);
     }
 
-    public void login() {
-        cargarPantalla(Screens.LOGIN);
-    }
-
 }

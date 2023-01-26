@@ -15,21 +15,15 @@ public class Constantes {
 
     //Column names for mapping tables
     public static final String ID = "id";
-    public static final String ID_READER = "id_reader";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final String EMAIL = "mail";
-    public static final String ROLE = "role";
 
     //Exceptions messages
-    public static final String READER_NOT_FOUND = "Reader not found";
     public static final String LOGIN_NOT_FOUND = "Login not found";
     public static final String DATABASE_ERROR = "Database error";
-    public static final String MESSAGE_NOT_FOUND = "No messages found for this vault credentials";
     public static final String READ_BY_ALL = "read";
     public static final String WRITE_BY_ALL = "write";
     public static final String NAME = "name";
-    public static final String VAULT_NOT_FOUND = "Vault not found";
 
     private Constantes() {
     }
