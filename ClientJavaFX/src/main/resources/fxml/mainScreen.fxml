@@ -25,14 +25,16 @@
                     <MenuItem fx:id="menuItemModoOscuro" mnemonicParsing="false" onAction="#cambiarcss"
                               text="%ChangeTheme"/>
                 </Menu>
-                <Menu fx:id="menuHelp" mnemonicParsing="false" text="%Help">
-                    <MenuItem fx:id="menuItemAcercaDe" mnemonicParsing="false" onAction="#acercaDe" text="%About"/>
-                </Menu>
                 <Menu fx:id="menuUsers" mnemonicParsing="false" text="%Users">
-                    <MenuItem fx:id="menuItemUsersManagement" mnemonicParsing="false" onAction="#menuOnClick" text="%UsersManagement"/>
+                    <MenuItem fx:id="menuItemUsersManagement" mnemonicParsing="false" onAction="#menuOnClick"
+                              text="%UsersManagement"/>
                 </Menu>
                 <Menu fx:id="menuVaults" mnemonicParsing="false" text="%Vaults">
-                    <MenuItem fx:id="menuItemVaultsManagement" mnemonicParsing="false" onAction="#menuOnClick" text="%VaultsManagement"/>
+                    <MenuItem fx:id="menuItemVaultsManagement" mnemonicParsing="false" onAction="#menuOnClick"
+                              text="%VaultsManagement"/>
+                </Menu>
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="%Help">
+                    <MenuItem fx:id="menuItemAcercaDe" mnemonicParsing="false" onAction="#acercaDe" text="%About"/>
                 </Menu>
             </MenuBar>
             <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-lock" size="21.0" styleClass="always-on-top-icon"/>
