@@ -1,15 +1,16 @@
 package org.jorgetargz.client.gui.screens.welcome;
 
-import org.jorgetargz.client.gui.screens.common.BaseScreenController;
-import org.jorgetargz.client.gui.screens.common.ScreenConstants;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
+import org.jorgetargz.client.gui.screens.common.BaseScreenController;
+import org.jorgetargz.client.gui.screens.common.ScreenConstants;
 import org.jorgetargz.utils.modelo.User;
 
 public class WelcomeScreenController extends BaseScreenController {
+
 
     @FXML
     private Label lbBienvenido;

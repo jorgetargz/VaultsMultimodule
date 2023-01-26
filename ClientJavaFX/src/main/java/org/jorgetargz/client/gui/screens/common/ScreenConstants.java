@@ -13,6 +13,7 @@ public class ScreenConstants {
     public static final String FXML_WELCOME_SCREEN_FXML = "/fxml/welcomeScreen.fxml";
     public static final String FXML_USERS_MANAGEMENT_SCREEN_FXML = "/fxml/usersManagementScreen.fxml";
     public static final String FXML_VAULTS_MANAGEMENT_SCREEN_FXML = "/fxml/vaultsManagementScreen.fxml";
+    public static final String FXML_VAULT_SCREEN_FXML = "/fxml/vaultScreen.fxml";
 
     public static final String MENU_ITEM_PANTALLA_USERS_MANAGEMENT = "menuItemUsersManagement";
     public static final String MENU_ITEM_PANTALLA_VAULTS_MANAGEMENT = "menuItemVaultsManagement";

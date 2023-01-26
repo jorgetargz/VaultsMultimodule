@@ -83,6 +83,7 @@ public class VaultsManagementViewModel {
                             state.set(new VaultsManagementState(either.getLeft(), null, null, false, false, true));
                         else {
                             Vault credential = Vault.builder()
+                                    .id(either.get().getId())
                                     .name(vault.getName())
                                     .usernameOwner(vault.getUsernameOwner())
                                     .password(passwordText)
@@ -105,6 +106,7 @@ public class VaultsManagementViewModel {
                             state.set(new VaultsManagementState(either.getLeft(), null, null, false, false, true));
                         else {
                             Vault credential = Vault.builder()
+                                    .id(either.get().getId())
                                     .name(nameVaultText)
                                     .usernameOwner(usernameOwnerText)
                                     .password(passwordText)

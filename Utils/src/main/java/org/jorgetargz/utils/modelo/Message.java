@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +12,9 @@ public class Message {
     private int idVault;
     private ContentCiphed contentCiphed;
     private String contentUnsecured;
+
+    @Override
+    public String toString() {
+        return " Message: " + this.id + "";
+    }
 }

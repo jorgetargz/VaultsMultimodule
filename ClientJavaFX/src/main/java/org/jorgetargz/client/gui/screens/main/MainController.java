@@ -217,7 +217,7 @@ public class MainController {
 
     public void onVaultOpened(Vault vault) {
         this.vault = vault;
-        //cargarPantalla(Screens.VAULT);
+        cargarPantalla(Screens.VAULT);
     }
 
     public void login() {

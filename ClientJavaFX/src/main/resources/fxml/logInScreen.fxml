@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="650.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.jorgetargz.client.gui.screens.login.LoginController">
-    <Label id="tituloLogin" layoutX="415.0" layoutY="33.0" text="%Title" textFill="#d978c6"/>
+    <Label id="tituloLogin" layoutX="415.0" layoutY="33.0" text="%Title"/>
     <ImageView fx:id="logo" fitHeight="222.0" fitWidth="290.0" layoutX="333.0" layoutY="120.0" pickOnBounds="true"
                preserveRatio="true">
     </ImageView>

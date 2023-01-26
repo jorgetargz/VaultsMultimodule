@@ -33,7 +33,6 @@ public class ServicesVaultsImpl implements ServicesVaults {
         this.decoder = Base64.getDecoder();
     }
 
-
     @Override
     public List<Vault> getVaults(String username) {
         return vaultsDao.getVaults(username);

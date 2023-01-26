@@ -77,6 +77,7 @@
 
 #tituloLogin {
     -fx-font-size: 55;
+    -fx-text-fill: #082D80;
     -fx-font-family: "Bauhaus 93";
 }
 
