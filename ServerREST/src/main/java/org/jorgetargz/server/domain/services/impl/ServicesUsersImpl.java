@@ -19,11 +19,13 @@ import java.util.Base64;
 public class ServicesUsersImpl implements ServicesUsers, Serializable {
 
     private final UsersDao daoLogin;
+    private final JWTBlackList jwtBlackList;
     private final Pbkdf2PasswordHash passwordHash;
 
     @Inject
-    public ServicesUsersImpl(UsersDao daoLogin, Pbkdf2PasswordHash passwordHash) {
+    public ServicesUsersImpl(UsersDao daoLogin, JWTBlackList jwtBlackList, Pbkdf2PasswordHash passwordHash) {
         this.daoLogin = daoLogin;
+        this.jwtBlackList = jwtBlackList;
         this.passwordHash = passwordHash;
     }
 
@@ -61,7 +63,7 @@ public class ServicesUsersImpl implements ServicesUsers, Serializable {
         String[] headerFields = authorization.split(Constantes.WHITE_SPACE);
         if (headerFields.length == 2) {
             String token = headerFields[1];
-            JWTBlackList.getInstance().addToken(token);
+            jwtBlackList.getJWTBlackList().add(token);
         }
     }
 

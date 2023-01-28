@@ -2,8 +2,11 @@ package org.jorgetargz.server.jakarta.common;
 
 public class Constantes {
 
+    public static final String IDENTITY_STORE = "IdentityStore";
+
     private Constantes() {
     }
+
 
 
     public static final String TOKEN_IN_BLACK_LIST = "Token in black list";
@@ -11,6 +14,8 @@ public class Constantes {
     public static final int EXPIRATION_TIME_MINUTES_IN_THE_FUTURE = 5;
     public static final int NOT_BEFORE_MINUTES_IN_THE_PAST = 2;
     public static final int SECONDS_OF_ALLOWED_CLOCK_SKEW = 30;
+
+    public static final int RSA_KEY_SIZE = 2048;
 
     public static final String BASIC = "Basic";
     public static final String WHITE_SPACE = " ";
