@@ -7,6 +7,7 @@ import org.jorgetargz.server.domain.common.Constantes;
 import org.jorgetargz.server.domain.services.ServicesUsers;
 import org.jorgetargz.server.domain.services.excepciones.ValidationException;
 import jakarta.inject.Inject;
+import org.jorgetargz.server.jakarta.security.JWTBlackList;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import lombok.extern.log4j.Log4j2;
 import org.jorgetargz.utils.modelo.User;
@@ -53,6 +54,15 @@ public class ServicesUsersImpl implements ServicesUsers, Serializable {
             throw new UnauthorizedException(Constantes.USERNAME_OR_PASSWORD_INCORRECT);
         }
         return userDB;
+    }
+
+    @Override
+    public void scLogout(String authorization) {
+        String[] headerFields = authorization.split(Constantes.WHITE_SPACE);
+        if (headerFields.length == 2) {
+            String token = headerFields[1];
+            JWTBlackList.getInstance().addToken(token);
+        }
     }
 
     @Override

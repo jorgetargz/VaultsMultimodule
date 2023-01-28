@@ -46,8 +46,15 @@ public class RESTLogin {
     @GET
     @RolesAllowed({ConstantesAPI.ROLE_ADMIN, ConstantesAPI.ROLE_USER})
     @Path(ConstantesAPI.LOGOUT_PATH)
-    public Response logout() {
-        return Response.noContent().build();
+    public Response logout(@HeaderParam(HttpHeaders.AUTHORIZATION) String authorization) {
+        if (securityContext.getUserPrincipal() != null) {
+            servicesUsers.scLogout(authorization);
+            return Response.noContent().build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(new BaseError((String) httpRequest.getAttribute(Constantes.ERROR_LOGIN), LocalDateTime.now()))
+                    .build();
+        }
     }
 
 }
